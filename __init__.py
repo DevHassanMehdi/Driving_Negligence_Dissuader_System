@@ -158,7 +158,7 @@ class DNDS(QWidget):
 			# Method to stop the Drowsiness detection operation and go back to home page
 			def stop_operation():
 				clear_widgets()
-				dds_video_feed.stop()
+				drowsiness_detection_system.stop()
 				home_page()
 			
 			# Create a label to display video on top of it
@@ -166,28 +166,28 @@ class DNDS(QWidget):
 			widgets["video_feed_dds"].append(video_feed_dds)
 			
 			# Create a thread using DDS thread class and start the thread thereby starting DDS
-			dds_video_feed = StartDDS()
-			dds_video_feed.start()
+			drowsiness_detection_system = StartDDS()
+			drowsiness_detection_system.start()
 			# Set the incoming video from the drowsy_yawn_detection.py on top of the label
-			dds_video_feed.ImageUpdate.connect(video_stream_update)
+			drowsiness_detection_system.ImageUpdate.connect(video_stream_update)
 			
 			# Create label to show EAR and Drowsy Count
 			show_ear = create_label()
 			widgets["show_ear_dds"].append(show_ear)
 			# Set the incoming string from the drowsy_yawn_detection.py on top of the label
-			dds_video_feed.DrowsyStats.connect(ear_update)
+			drowsiness_detection_system.DrowsyStats.connect(ear_update)
 			
 			# Create label to show MAR and Yawn Count
 			show_mar = create_label()
 			widgets["show_mar_dds"].append(show_mar)
 			# Set the incoming string from the drowsy_yawn_detection.py on top of the label
-			dds_video_feed.YawnStats.connect(mar_update)
+			drowsiness_detection_system.YawnStats.connect(mar_update)
 			
 			# Create label to show drowsy or yawning status
 			status_update_dds = create_label()
 			widgets["status_update_dds"].append(status_update_dds)
 			# Set the incoming string from the drowsy_yawn_detection.py on top of the label
-			dds_video_feed.Status.connect(status_update)
+			drowsiness_detection_system.Status.connect(status_update)
 			
 			# Create stop button that will call the stop_operation method
 			stop_button_dds = create_button("Stop")
@@ -196,7 +196,7 @@ class DNDS(QWidget):
 			
 			# Return the widgets to DNDS page is the call came from DNDS page
 			if return_items:
-				return dds_video_feed, video_feed_dds, show_ear, show_mar, status_update_dds, stop_button_dds
+				return drowsiness_detection_system, video_feed_dds, show_ear, show_mar, status_update_dds, stop_button_dds
 			# Display the widgets in separate page
 			else:
 				# place widgets on the grid
@@ -228,7 +228,7 @@ class DNDS(QWidget):
 			# Method to stop the Lane detection operation and go back to home page
 			def stop_operation():
 				clear_widgets()
-				lds_video_feed.stop()
+				lane_detection_system.stop()
 				home_page()
 			
 			try:
@@ -237,28 +237,28 @@ class DNDS(QWidget):
 				widgets["video_feed_lds"].append(video_feed_lds)
 				
 				# Create a thread using LDS thread class and start the thread thereby starting LDS
-				lds_video_feed = StartLDS()
-				lds_video_feed.start()
+				lane_detection_system = StartLDS()
+				lane_detection_system.start()
 				# Set the incoming video from the lane_detection.py on top of the label
-				lds_video_feed.ImageUpdate.connect(video_stream_update)
+				lane_detection_system.ImageUpdate.connect(video_stream_update)
 				
 				# Create label to show curve radius
 				show_curve_radius = create_label()
 				widgets["show_curve_radius_lds"].append(show_curve_radius)
 				# Set the incoming string from the lane_detection.py on top of the label
-				lds_video_feed.CurveRadius.connect(curve_radius_update)
+				lane_detection_system.CurveRadius.connect(curve_radius_update)
 				
 				# Create label to show curve offset
 				show_curve_offset = create_label()
 				widgets["show_curve_offset_lds"].append(show_curve_offset)
 				# Set the incoming string from the lane_detection.py on top of the label
-				lds_video_feed.CurveOffset.connect(curve_offset_update)
+				lane_detection_system.CurveOffset.connect(curve_offset_update)
 				
 				# Create label to show lane status
 				status_update_lds = create_label()
 				widgets["status_update_lds"].append(status_update_lds)
 				# Set the incoming string from the lane_detection.py on top of the label
-				lds_video_feed.Status.connect(status_update)
+				lane_detection_system.Status.connect(status_update)
 				
 				# Create stop button that will call the stop_operation method
 				stop_button_lds = create_button("Stop")
@@ -267,7 +267,7 @@ class DNDS(QWidget):
 				
 				# Return the widgets to DNDS page is the call came from DNDS page
 				if return_items:
-					return lds_video_feed, video_feed_lds, show_curve_radius, show_curve_offset, status_update_lds, stop_button_lds
+					return lane_detection_system, video_feed_lds, show_curve_radius, show_curve_offset, status_update_lds, stop_button_lds
 				# Show the widgets in a separate page
 				else:
 					grid.addWidget(show_curve_radius, 0, 0, 1, 2)
@@ -293,7 +293,7 @@ class DNDS(QWidget):
 			# Method to stop the object detection operation and go back to home page
 			def stop_operation():
 				clear_widgets()
-				ods_video_feed.stop()
+				object_detection_system.stop()
 				home_page()
 			
 			try:
@@ -302,17 +302,17 @@ class DNDS(QWidget):
 				widgets["video_feed_ods"].append(video_feed_ods)
 				
 				# Create a thread using ODS thread class and start the thread thereby starting ODS
-				ods_video_feed = StartODS()
-				ods_video_feed.start()
+				object_detection_system = StartODS()
+				object_detection_system.start()
 				# Set the incoming video from the object_detection.py on top of the label
-				ods_video_feed.ImageUpdate.connect(video_stream_update)
+				object_detection_system.ImageUpdate.connect(video_stream_update)
 				
 				# Create label to show detection stats
 				show_detection_stats = create_label()
 				widgets["show_detection_stats_ods"].append(show_detection_stats)
 				show_detection_stats.setAlignment(QtCore.Qt.AlignJustify)
 				# Set the incoming string from the object_detection.py on top of the label
-				ods_video_feed.odsDetectionStats.connect(detection_stats_update)
+				object_detection_system.odsDetectionStats.connect(detection_stats_update)
 				
 				# Create sto button that will call the stop_operation method
 				stop_button_ods = create_button("Stop")
@@ -321,7 +321,7 @@ class DNDS(QWidget):
 				
 				# Return the widgets to DNDS page is the call came from DNDS page
 				if return_items:
-					return ods_video_feed, video_feed_ods, show_detection_stats, stop_button_ods
+					return object_detection_system, video_feed_ods, show_detection_stats, stop_button_ods
 				# Show the widgets in a separate page
 				else:
 					grid.addWidget(show_detection_stats, 0, 0, 1, 4)
@@ -345,7 +345,7 @@ class DNDS(QWidget):
 			# Method to stop the object detection operation and go back to home page
 			def stop_operation():
 				clear_widgets()
-				pds_video_feed.stop()
+				pedestrian_detection_system.stop()
 				home_page()
 			
 			try:
@@ -354,17 +354,17 @@ class DNDS(QWidget):
 				widgets["video_feed_pds"].append(video_feed_pds)
 				
 				# Create a thread using ODS thread class and start the thread thereby starting PDS
-				pds_video_feed = StartPDS()
-				pds_video_feed.start()
+				pedestrian_detection_system = StartPDS()
+				pedestrian_detection_system.start()
 				# Set the incoming video from the pedestrian_detection.py on top of the label
-				pds_video_feed.ImageUpdate.connect(video_stream_update)
+				pedestrian_detection_system.ImageUpdate.connect(video_stream_update)
 				
 				# Create label to show detection stats
 				show_detection_stats_pds = create_label()
 				show_detection_stats_pds.setAlignment(QtCore.Qt.AlignJustify)
 				widgets["show_detection_stats_pds"].append(show_detection_stats_pds)
 				# Set the incoming string from the pedestrian_detection.py on top of the label
-				pds_video_feed.TotalPeople.connect(detection_stats_update)
+				pedestrian_detection_system.TotalPeople.connect(detection_stats_update)
 				
 				# Create sto button that will call the stop_operation method
 				stop_button_pds = create_button("Stop")
@@ -373,7 +373,7 @@ class DNDS(QWidget):
 				
 				# Return the widgets to DNDS page is the call came from DNDS page
 				if return_items:
-					return pds_video_feed, video_feed_pds, show_detection_stats_pds, stop_button_pds
+					return pedestrian_detection_system, video_feed_pds, show_detection_stats_pds, stop_button_pds
 				# Show the widgets in a separate page
 				else:
 					grid.addWidget(show_detection_stats_pds, 0, 0, 1, 4)
@@ -388,24 +388,24 @@ class DNDS(QWidget):
 			# Method to stop the object detection operation and go back to home page
 			def stop_operation():
 				clear_widgets()
-				dds_video_feed.stop()
-				lds_video_feed.stop()
-				ods_video_feed.stop()
-				# pds_video_feed.stop()
+				drowsiness_detection_system.stop()
+				lane_detection_system.stop()
+				object_detection_system.stop()
+				# pedestrian_detection_system.stop()
 				
 				home_page()
 			
 			try:
 				# Call Lane detection system and receive the widgets
-				lds_video_feed, video_feed_lds, show_curve_radius, show_curve_offset, status_update_lds, stop_button_lds = page_lds(
+				lane_detection_system, video_feed_lds, show_curve_radius, show_curve_offset, status_update_lds, stop_button_lds = page_lds(
 					return_items=True)
 				# Call Drowsiness detection system and receive the widgets
-				dds_video_feed, video_feed_dds, show_ear, show_mar, status_update_dds, stop_button_dds = page_dds(
+				drowsiness_detection_system, video_feed_dds, show_ear, show_mar, status_update_dds, stop_button_dds = page_dds(
 					return_items=True)
 				# Call Object detection system and receive the widgets
-				ods_video_feed, video_feed_ods, show_detection_stats, stop_button_ods = page_ods(return_items=True)
+				object_detection_system, video_feed_ods, show_detection_stats, stop_button_ods = page_ods(return_items=True)
 				# Call Pedestrian detection system and receive the widgets
-				# pds_video_feed, video_feed_pds, show_detection_stats_pds, stop_button_pds = page_pds(return_items=True)
+				# pedestrian_detection_system, video_feed_pds, show_detection_stats_pds, stop_button_pds = page_pds(return_items=True)
 				
 				# Create stop button that will call the stop_operation method
 				stop_button_dnds = create_button("Stop")
