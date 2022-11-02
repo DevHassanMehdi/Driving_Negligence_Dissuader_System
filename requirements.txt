@@ -1,0 +1,18 @@
+opencv-python==4.6.0.66
+matplotlib==3.6.0
+# also pip install seaborn (to install matplotlb seaborn)
+torchvision==0.14.0
+imutils==0.5.4
+torch==1.13.0
+pandas==1.5.1
+numpy==1.23.4
+dlib==19.24.0
+scipy==1.9.3
+tqdm==4.64.1
+CMake
+
+requests==2.28.1
+PyYAML==6.0
+
+PyQt5==5.15.7
+PyQt5-stubs==5.15.6.0
