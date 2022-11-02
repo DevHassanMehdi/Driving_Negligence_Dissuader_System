@@ -267,7 +267,13 @@ class DNDS(QWidget):
 				
 				# Return the widgets to DNDS page is the call came from DNDS page
 				if return_items:
-					return lane_detection_system, video_feed_lds, show_curve_radius, show_curve_offset, status_update_lds, stop_button_lds
+					return \
+						lane_detection_system, \
+						video_feed_lds, \
+						show_curve_radius, \
+						show_curve_offset, \
+						status_update_lds, \
+						stop_button_lds
 				# Show the widgets in a separate page
 				else:
 					grid.addWidget(show_curve_radius, 0, 0, 1, 2)
@@ -397,15 +403,17 @@ class DNDS(QWidget):
 			
 			try:
 				# Call Lane detection system and receive the widgets
-				lane_detection_system, video_feed_lds, show_curve_radius, show_curve_offset, status_update_lds, stop_button_lds = page_lds(
-					return_items=True)
+				lane_detection_system, video_feed_lds, show_curve_radius, show_curve_offset, status_update_lds,\
+					stop_button_lds = page_lds(return_items=True)
 				# Call Drowsiness detection system and receive the widgets
-				drowsiness_detection_system, video_feed_dds, show_ear, show_mar, status_update_dds, stop_button_dds = page_dds(
-					return_items=True)
+				drowsiness_detection_system, video_feed_dds, show_ear, show_mar, status_update_dds,\
+					stop_button_dds = page_dds(return_items=True)
 				# Call Object detection system and receive the widgets
-				object_detection_system, video_feed_ods, show_detection_stats, stop_button_ods = page_ods(return_items=True)
+				object_detection_system, video_feed_ods, show_detection_stats,\
+					stop_button_ods = page_ods(return_items=True)
 				# Call Pedestrian detection system and receive the widgets
-				# pedestrian_detection_system, video_feed_pds, show_detection_stats_pds, stop_button_pds = page_pds(return_items=True)
+				# pedestrian_detection_system, video_feed_pds, show_detection_stats_pds,
+				# 	stop_button_pds = page_pds(return_items=True)
 				
 				# Create stop button that will call the stop_operation method
 				stop_button_dnds = create_button("Stop")
