@@ -61,19 +61,6 @@ class DNDS(QWidget):
 		self.setGeometry(0, 0, 850, 650)
 		self.setFont(QFont("Nunito"))
 		
-		# For Frameless transparent window with rounded corners
-		# self.centralwidget = QWidget(self)
-		# self.centralwidget.resize(850, 650)
-		#
-		# self.setWindowFlag(Qt.FramelessWindowHint)
-		# self.setAttribute(Qt.WA_TranslucentBackground)
-		# self.setAttribute(Qt.WA_NoSystemBackground)
-		#
-		# self.centralwidget.setWindowOpacity(0.6)
-		# self.centralwidget.setStyleSheet("""
-		# 	background:rgb(33, 33, 33);
-		# 	border-radius:30%;""")
-		
 		# Call clear widgets method and switch to the called page
 		def start_operation(operation_id):
 			clear_widgets()
