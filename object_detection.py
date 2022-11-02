@@ -35,7 +35,7 @@ class StartODS(QThread):
             if ret:
                 try:
                     # Resizing Frames
-                    frame = cv.resize(frame, (580, 435))
+                    frame = cv.resize(frame, (640, 360))
                 
                     # Detect objects
                     frame = model(frame)
@@ -62,7 +62,7 @@ class StartODS(QThread):
                     frame.data, frame.shape[1],
                     frame.shape[0],
                     QImage.Format_RGB888)
-                frame = convert_to_qt_format.scaled(800, 600, Qt.KeepAspectRatio)
+                frame = convert_to_qt_format.scaled(640, 360, Qt.KeepAspectRatio)
             
                 # Send the frames and Stats to the GUI window
                 self.ImageUpdate.emit(frame)

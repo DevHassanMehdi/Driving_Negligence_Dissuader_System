@@ -629,7 +629,7 @@ class StartLDS(QThread):
 			ret, frame = video_stream.read()
 			if ret:
 				# Resize the frame
-				frame = cv.resize(frame, (640, 480))
+				frame = cv.resize(frame, (640, 360))
 				# Store the original frame
 				original_frame = frame.copy()
 				try:
@@ -671,7 +671,7 @@ class StartLDS(QThread):
 						frame.data, frame.shape[1],
 						frame.shape[0],
 						QImage.Format_RGB888)
-					frame = convert_to_qt_format.scaled(800, 600, Qt.KeepAspectRatio)
+					frame = convert_to_qt_format.scaled(640, 360, Qt.KeepAspectRatio)
 					
 					# # Send the frames and Stats to the GUI page
 					self.ImageUpdate.emit(frame)

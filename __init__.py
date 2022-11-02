@@ -61,6 +61,38 @@ class DNDS(QWidget):
 		self.setGeometry(0, 0, 850, 650)
 		self.setFont(QFont("Nunito"))
 		
+		# Method to make the video corners round
+		def make_frame_rounded(widget, video_frame, antialiasing=True):
+			# set Min Max size for video label widget
+			widget.setMaximumSize(widget.width(), widget.height())
+			widget.setMinimumSize(widget.width(), widget.height())
+			# Roundness of the corners
+			radius = 10
+			# The final frame that is to be set onto the Qlabel
+			final_rounded_frame = QPixmap(widget.size())
+			final_rounded_frame.fill(Qt.transparent)
+			# Scale the input frame according to the label dimensions
+			frame = QPixmap(video_frame).scaled(
+				widget.width(), widget.height(), Qt.KeepAspectRatioByExpanding, Qt.SmoothTransformation)
+			# Painter to paint the rounded rectangle onto the final frame
+			painter = QPainter(final_rounded_frame)
+			# If Antialiasing is On, make the rounded corners smoother
+			if antialiasing:
+				painter.setRenderHint(QPainter.Antialiasing, True)
+				painter.setRenderHint(QPainter.HighQualityAntialiasing, True)
+				painter.setRenderHint(QPainter.SmoothPixmapTransform, True)
+			# Paint the frame
+			path = QPainterPath()
+			path.addRoundedRect(10, 10, widget.width() - 15, widget.height() - 15, radius, radius)
+			painter.setClipPath(path)
+			painter.drawPixmap(0, 0, frame)
+			# Set the painted frames ont the Qlabel widget
+			widget.setPixmap(final_rounded_frame)
+			# terminate the painter
+			painter.end()
+			# Return the widget
+			return widget
+		
 		# Call clear widgets method and switch to the called page
 		def start_operation(operation_id):
 			clear_widgets()
@@ -80,7 +112,7 @@ class DNDS(QWidget):
 			if operation_id == "DNDS":
 				page_dnds()
 				# self.centralwidget.resize(1100, 850)
-				self.setFixedSize(1100, 850)
+				self.setFixedSize(1200, 850)
 		
 		# Methods to clear all the widgets in current page when switching to another page
 		def clear_widgets():
@@ -141,8 +173,8 @@ class DNDS(QWidget):
 			# Update the video stream constantly while receiving frames from the drowsy_yawn_detection.py file
 			def video_stream_update(frame):
 				# Set the frame onto th videoFeed label
-				video_feed_dds.setPixmap(QPixmap.fromImage(frame))
-			
+				make_frame_rounded(video_feed_dds, frame, antialiasing=False)
+				
 			# Update the Eye Aspect Ratio constantly while receiving data from the drowsy_yawn_detection.py file
 			def ear_update(drowsy_stats):
 				show_ear.setText(drowsy_stats)
@@ -161,57 +193,72 @@ class DNDS(QWidget):
 				drowsiness_detection_system.stop()
 				home_page()
 			
-			# Create a label to display video on top of it
-			video_feed_dds = create_label()
-			widgets["video_feed_dds"].append(video_feed_dds)
-			
-			# Create a thread using DDS thread class and start the thread thereby starting DDS
-			drowsiness_detection_system = StartDDS()
-			drowsiness_detection_system.start()
-			# Set the incoming video from the drowsy_yawn_detection.py on top of the label
-			drowsiness_detection_system.ImageUpdate.connect(video_stream_update)
-			
-			# Create label to show EAR and Drowsy Count
-			show_ear = create_label()
-			widgets["show_ear_dds"].append(show_ear)
-			# Set the incoming string from the drowsy_yawn_detection.py on top of the label
-			drowsiness_detection_system.DrowsyStats.connect(ear_update)
-			
-			# Create label to show MAR and Yawn Count
-			show_mar = create_label()
-			widgets["show_mar_dds"].append(show_mar)
-			# Set the incoming string from the drowsy_yawn_detection.py on top of the label
-			drowsiness_detection_system.YawnStats.connect(mar_update)
-			
-			# Create label to show drowsy or yawning status
-			status_update_dds = create_label()
-			widgets["status_update_dds"].append(status_update_dds)
-			# Set the incoming string from the drowsy_yawn_detection.py on top of the label
-			drowsiness_detection_system.Status.connect(status_update)
-			
-			# Create stop button that will call the stop_operation method
-			stop_button_dds = create_button("Stop")
-			stop_button_dds.clicked.connect(stop_operation)
-			widgets["stop_button_dds"].append(stop_button_dds)
-			
-			# Return the widgets to DNDS page is the call came from DNDS page
-			if return_items:
-				return drowsiness_detection_system, video_feed_dds, show_ear, show_mar, status_update_dds, stop_button_dds
-			# Display the widgets in separate page
-			else:
-				# place widgets on the grid
-				grid.addWidget(show_ear, 0, 0, 1, 2)
-				grid.addWidget(show_mar, 0, 2, 1, 2)
-				grid.addWidget(video_feed_dds, 1, 0, 1, 4)
-				grid.addWidget(status_update_dds, 2, 0, 1, 4)
-				grid.addWidget(stop_button_dds, 3, 0, 1, 4)
+			try:
+				# Create a label to display video on top of it
+				video_feed_dds = QLabel()
+				widgets["video_feed_dds"].append(video_feed_dds)
+				#
+				# Create a thread using DDS thread class and start the thread thereby starting DDS
+				drowsiness_detection_system = StartDDS()
+				drowsiness_detection_system.start()
+				# Set the incoming video from the drowsy_yawn_detection.py on top of the label
+				drowsiness_detection_system.ImageUpdate.connect(video_stream_update)
+				
+				# Create label to show EAR and Drowsy Count
+				show_ear = create_label()
+				widgets["show_ear_dds"].append(show_ear)
+				# Set the incoming string from the drowsy_yawn_detection.py on top of the label
+				drowsiness_detection_system.DrowsyStats.connect(ear_update)
+				
+				# Create label to show MAR and Yawn Count
+				show_mar = create_label()
+				widgets["show_mar_dds"].append(show_mar)
+				# Set the incoming string from the drowsy_yawn_detection.py on top of the label
+				drowsiness_detection_system.YawnStats.connect(mar_update)
+				
+				# Create label to show drowsy or yawning status
+				status_update_dds = create_label()
+				widgets["status_update_dds"].append(status_update_dds)
+				# Set the incoming string from the drowsy_yawn_detection.py on top of the label
+				drowsiness_detection_system.Status.connect(status_update)
+				
+				# Create stop button that will call the stop_operation method
+				stop_button_dds = create_button("Stop")
+				stop_button_dds.clicked.connect(stop_operation)
+				widgets["stop_button_dds"].append(stop_button_dds)
+				
+				# Return the widgets to DNDS page is the call came from DNDS page
+				if return_items:
+					# Set Frame size according to the window
+					video_feed_dds.setFixedSize(560, 315)
+					return \
+						drowsiness_detection_system, \
+						video_feed_dds, \
+						show_ear, \
+						show_mar, \
+						status_update_dds, \
+						stop_button_dds
+				# Display the widgets in separate page
+				else:
+					# Set Frame size according to the window
+					video_feed_dds.setFixedSize(800, 450)
+
+					# place widgets on the grid
+					grid.addWidget(show_ear, 0, 0, 1, 2)
+					grid.addWidget(show_mar, 0, 2, 1, 2)
+					grid.addWidget(video_feed_dds, 1, 0, 1, 4)
+					grid.addWidget(status_update_dds, 2, 0, 1, 4)
+					grid.addWidget(stop_button_dds, 3, 0, 1, 4)
+					
+			except TypeError or ValueError or AttributeError:
+				pass
 		
 		# Lane Detection System page
 		def page_lds(return_items):
 			# Update the video stream constantly while receiving frames from the lane_detection.py file
 			def video_stream_update(frame):
 				# Set the frame onto th videoFeed label
-				video_feed_lds.setPixmap(QPixmap.fromImage(frame))
+				make_frame_rounded(video_feed_lds, frame, antialiasing=False)
 			
 			# Update the curve radius value constantly while receiving data from the lane_detection.py file
 			def curve_radius_update(curve_radius):
@@ -267,6 +314,8 @@ class DNDS(QWidget):
 				
 				# Return the widgets to DNDS page is the call came from DNDS page
 				if return_items:
+					# Set Frame size according to the window
+					video_feed_lds.setFixedSize(560, 315)
 					return \
 						lane_detection_system, \
 						video_feed_lds, \
@@ -276,6 +325,8 @@ class DNDS(QWidget):
 						stop_button_lds
 				# Show the widgets in a separate page
 				else:
+					# Set Frame size according to the window
+					video_feed_lds.setFixedSize(800, 450)
 					grid.addWidget(show_curve_radius, 0, 0, 1, 2)
 					grid.addWidget(show_curve_offset, 0, 2, 1, 2)
 					grid.addWidget(video_feed_lds, 1, 0, 1, 4)
@@ -290,7 +341,7 @@ class DNDS(QWidget):
 			# Update the video stream constantly while receiving frames from the object_detection.py file
 			def video_stream_update(frame):
 				# Set the frame onto th videoFeed label
-				video_feed_ods.setPixmap(QPixmap.fromImage(frame))
+				make_frame_rounded(video_feed_ods, frame, antialiasing=False)
 			
 			# Update the detection stats constantly while receiving data from the object_detection.py file
 			def detection_stats_update(stats):
@@ -327,9 +378,17 @@ class DNDS(QWidget):
 				
 				# Return the widgets to DNDS page is the call came from DNDS page
 				if return_items:
-					return object_detection_system, video_feed_ods, show_detection_stats, stop_button_ods
+					# Set Frame size according to the window
+					video_feed_ods.setFixedSize(560, 315)
+					return \
+						object_detection_system, \
+						video_feed_ods, \
+						show_detection_stats, \
+						stop_button_ods
 				# Show the widgets in a separate page
 				else:
+					# Set Frame size according to the window
+					video_feed_ods.setFixedSize(800, 450)
 					grid.addWidget(show_detection_stats, 0, 0, 1, 4)
 					grid.addWidget(video_feed_ods, 1, 0, 1, 4)
 					grid.addWidget(stop_button_ods, 2, 0, 1, 4)
@@ -342,7 +401,7 @@ class DNDS(QWidget):
 			# Update the video stream constantly while receiving frames from the pedestrian_detection.py file
 			def video_stream_update(frame):
 				# Set the frame onto th videoFeed label
-				video_feed_pds.setPixmap(QPixmap.fromImage(frame))
+				make_frame_rounded(video_feed_pds, frame, antialiasing=False)
 			
 			# Update the detection stats constantly while receiving data from the pedestrian_detection.py file
 			def detection_stats_update(stats):
@@ -379,9 +438,17 @@ class DNDS(QWidget):
 				
 				# Return the widgets to DNDS page is the call came from DNDS page
 				if return_items:
-					return pedestrian_detection_system, video_feed_pds, show_detection_stats_pds, stop_button_pds
+					# Set Frame size according to the window
+					video_feed_pds.setFixedSize(560, 315)
+					return \
+						pedestrian_detection_system, \
+						video_feed_pds, \
+						show_detection_stats_pds, \
+						stop_button_pds
 				# Show the widgets in a separate page
 				else:
+					# Set Frame size according to the window
+					video_feed_pds.setFixedSize(800, 450)
 					grid.addWidget(show_detection_stats_pds, 0, 0, 1, 4)
 					grid.addWidget(video_feed_pds, 1, 0, 1, 4)
 					grid.addWidget(stop_button_pds, 2, 0, 1, 4)
