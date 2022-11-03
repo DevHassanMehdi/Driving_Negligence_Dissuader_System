@@ -1,4 +1,5 @@
 # PREP DEPENDENCIES
+from PyQt5.QtCore import QPoint
 from drowsy_yawn_detection import *  # Drowsiness detection system
 from object_detection import *  # Object Detection System
 from functools import partial  # To send args with connect command
@@ -7,7 +8,7 @@ from pedestrian_detection import *
 # PyQt5 items for our GUI application
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
-from PyQt5 import QtCore, QtGui
+from PyQt5 import QtCore
 # Misc Dependencies
 import sys  # For system functions
 
@@ -20,6 +21,7 @@ widgets = {
 	"start_ods": [],
 	"start_pds": [],
 	"start_dnds": [],
+	"exit_dnds": [],
 	"show_mar_dds": [],
 	"show_ear_dds": [],
 	"stop_button_dds": [],
@@ -41,27 +43,56 @@ widgets = {
 
 # Driving Negligence Dissuader System main class
 class DNDS(QWidget):
+	# Methods to move the frameless window upon drag
+	def mousePressEvent(self, event):
+		self.old_position = event.globalPos()
+	
+	# Grab old position from mousePressEvent and move the window as th mouse drags it
+	def mouseMoveEvent(self, event):
+		movement = QPoint(event.globalPos() - self.old_position)
+		self.move(self.x() + movement.x(), self.y() + movement.y())
+		self.old_position = event.globalPos()
+	
+	# Close event to exit the application
+	def closeEvent(self, event):
+		confirm_close = QMessageBox()
+		self.setAttribute(Qt.WA_TranslucentBackground)
+		confirm_close.setWindowOpacity(0.85)
+		confirm_close.setText("Close Application?")
+		confirm_close.setStandardButtons(QMessageBox.Close | QMessageBox.Cancel)
+		confirm_close = confirm_close.exec()
+		# If user confirms close then exit app otherwise ignore
+		if confirm_close == QMessageBox.Close:
+			sys.exit()
+		elif confirm_close == QMessageBox.Cancel:
+			pass
+	
+	def center(self):
+		qr = self.frameGeometry()
+		cp = QDesktopWidget().availableGeometry().center()
+		qr.moveCenter(cp)
+		self.move(qr.topLeft())
+	
 	def __init__(self, *args, **kwargs):
 		super(DNDS, self).__init__(*args, **kwargs)
-		
+		# Current window position
 		self.old_position = None
-		# Set and style the layout of the application window
-		palette = QtGui.QPalette()
-		# Gradient for window background
-		gradient = QLinearGradient(100, 100, 800, 800)
-		gradient.setColorAt(0.0, QColor(12, 12, 12, 250))
-		gradient.setColorAt(1.0, QColor(15, 15, 15, 250))
-		
-		palette.setBrush(QPalette.Window, QBrush(gradient))
-		app.setPalette(palette)
+		# Layout and window settings
 		grid = QGridLayout()
 		grid.setSpacing(10)
-		self.setPalette(palette)
 		self.setLayout(grid)
-		self.setGeometry(0, 0, 850, 650)
 		self.setFont(QFont("Nunito"))
+		self.centralwidget = QWidget(self)
+		self.centralwidget.resize(850, 650)
+		self.setWindowFlag(Qt.FramelessWindowHint)
+		self.setAttribute(Qt.WA_TranslucentBackground)
+		self.setWindowOpacity(0.99)
 		
-		# Method to make the video corners round
+		self.centralwidget.setStyleSheet("""
+			background: rgb(15, 15, 15);
+			border-radius: 20%;
+			""")
+		
 		def make_frame_rounded(widget, video_frame, antialiasing=True):
 			# set Min Max size for video label widget
 			widget.setMaximumSize(widget.width(), widget.height())
@@ -96,7 +127,6 @@ class DNDS(QWidget):
 		# Call clear widgets method and switch to the called page
 		def start_operation(operation_id):
 			clear_widgets()
-			
 			if operation_id == "DDS":
 				page_dds(return_items=False)
 				self.setFixedSize(850, 650)
@@ -111,8 +141,11 @@ class DNDS(QWidget):
 				self.setFixedSize(850, 650)
 			if operation_id == "DNDS":
 				page_dnds()
-				# self.centralwidget.resize(1100, 850)
 				self.setFixedSize(1200, 850)
+				self.center()
+			
+			# Resize central widget
+			self.centralwidget.resize(self.width(), self.height())
 		
 		# Methods to clear all the widgets in current page when switching to another page
 		def clear_widgets():
@@ -137,18 +170,18 @@ class DNDS(QWidget):
 			button.setGraphicsEffect(shadow)
 			# CSS styling of the button
 			button.setStyleSheet("""
-			*{
-				color: #EEEEEE;
-				font-size: 20px;
-				border:1.5px solid #AE082A;
-				border-radius : 30%;
-				width: 50px;
-				height: 50px;
-				padding: 5%;
-				margin: 15%;}
-				
-			*:hover{
-			background: #AE082A;}""")
+				*{
+					color: #EEEEEE;
+					font-size: 20px;
+					border:1.5px solid #AE082A;
+					border-radius : 30%;
+					width: 50px;
+					height: 50px;
+					padding: 5%;
+					margin: 15%;}
+					
+				*:hover{
+				background: #AE082A;}""")
 			# Return the button
 			return button
 		
@@ -163,8 +196,7 @@ class DNDS(QWidget):
 					color: #EEEEEE;
 					font-size: 20px;
 					border-radius: 30%;}
-				*:hover{
-				}""")
+				*:hover{}""")
 			# Return the label
 			return label
 		
@@ -174,7 +206,7 @@ class DNDS(QWidget):
 			def video_stream_update(frame):
 				# Set the frame onto th videoFeed label
 				make_frame_rounded(video_feed_dds, frame, antialiasing=False)
-				
+			
 			# Update the Eye Aspect Ratio constantly while receiving data from the drowsy_yawn_detection.py file
 			def ear_update(drowsy_stats):
 				show_ear.setText(drowsy_stats)
@@ -242,14 +274,14 @@ class DNDS(QWidget):
 				else:
 					# Set Frame size according to the window
 					video_feed_dds.setFixedSize(800, 450)
-
+					
 					# place widgets on the grid
 					grid.addWidget(show_ear, 0, 0, 1, 2)
 					grid.addWidget(show_mar, 0, 2, 1, 2)
 					grid.addWidget(video_feed_dds, 1, 0, 1, 4)
 					grid.addWidget(status_update_dds, 2, 0, 1, 4)
 					grid.addWidget(stop_button_dds, 3, 0, 1, 4)
-					
+			
 			except TypeError or ValueError or AttributeError:
 				pass
 		
@@ -470,16 +502,27 @@ class DNDS(QWidget):
 			
 			try:
 				# Call Lane detection system and receive the widgets
-				lane_detection_system, video_feed_lds, show_curve_radius, show_curve_offset, status_update_lds,\
+				lane_detection_system,\
+					video_feed_lds, \
+					show_curve_radius, \
+					show_curve_offset, \
+					status_update_lds, \
 					stop_button_lds = page_lds(return_items=True)
 				# Call Drowsiness detection system and receive the widgets
-				drowsiness_detection_system, video_feed_dds, show_ear, show_mar, status_update_dds,\
+				drowsiness_detection_system, \
+					video_feed_dds,\
+					show_ear, show_mar, \
+					status_update_dds, \
 					stop_button_dds = page_dds(return_items=True)
 				# Call Object detection system and receive the widgets
-				object_detection_system, video_feed_ods, show_detection_stats,\
+				object_detection_system, \
+					video_feed_ods, \
+					show_detection_stats, \
 					stop_button_ods = page_ods(return_items=True)
 				# Call Pedestrian detection system and receive the widgets
-				# pedestrian_detection_system, video_feed_pds, show_detection_stats_pds,
+				# pedestrian_detection_system,
+				# 	video_feed_pds,
+				# 	show_detection_stats_pds,
 				# 	stop_button_pds = page_pds(return_items=True)
 				
 				# Create stop button that will call the stop_operation method
@@ -516,16 +559,17 @@ class DNDS(QWidget):
 		# Home page of Drowsiness dissuader system
 		def home_page():
 			self.setFixedSize(850, 650)
+			self.center()
 			# header widget
 			header = create_label()
 			header.setText("Driving Negligence Dissuader")
 			header.setAlignment(QtCore.Qt.AlignCenter)
 			# CSS styling of the button
 			header.setStyleSheet("""*{
-					color: #EEEEEE;
-					font-weight: bold;
-					font-size: 48px;
-					padding: 35%}""")
+				color: #EEEEEE;
+				font-weight: bold;
+				font-size: 48px;
+				margin-top: 5%}""")
 			widgets["header"].append(header)
 			try:
 				# Start Drowsiness Detection System button
@@ -553,30 +597,47 @@ class DNDS(QWidget):
 				start_dnds.clicked.connect(partial(start_operation, "DNDS"))
 				widgets["start_dnds"].append(start_dnds)
 				
+				# Exit Driving Negligence Dissuader System button
+				exit_dnds = create_button("X")
+				exit_dnds.clicked.connect(self.closeEvent)
+				exit_dnds.setFixedSize(25, 25)
+				exit_dnds.setStyleSheet("""*{
+					color: #EEEEEE;
+					background: #AE082A;
+					font-size: 20px;
+					font-weight: bold;
+					border-radius : 12px;
+					padding: 1%;}
+					
+				*:hover{
+					border:1px solid #EEEEEE;}""")
+				widgets["exit_dnds"].append(exit_dnds)
+				
 				# footer widget
 				footer = create_label()
 				footer_text = \
 					'Driving Negligence Dissuader System (DNDS) is a vehicle safety system to detect drivers ' \
-					'drowsiness and yawning. The system also monitors the road in front to detect the road lanes ' \
+					'drowsiness and yawning.\nThe system also monitors the road in front to detect the road lanes ' \
 					'and other object in front of the vehicle'
 				footer.setAlignment(QtCore.Qt.AlignCenter)
 				footer.setText(footer_text)
 				footer.setWordWrap(True)
 				
 				footer.setStyleSheet("""*{
-							color: #EEEEEE;
-							font-size: 14px;
-							padding: 50%}""")
+					color: #EEEEEE;
+					font-size: 14px;
+					margin-bottom: 5%}""")
 				widgets["footer"].append(footer)
 				
 				# place widgets on the grid
-				grid.addWidget(widgets["header"][-1], 0, 0, 1, 4)
-				grid.addWidget(widgets["start_dds"][-1], 1, 0, 1, 2)
-				grid.addWidget(widgets["start_lds"][-1], 1, 2, 1, 2)
-				grid.addWidget(widgets["start_ods"][-1], 2, 0, 1, 2)
-				grid.addWidget(widgets["start_pds"][-1], 2, 2, 1, 2)
-				grid.addWidget(widgets["start_dnds"][-1], 3, 0, 1, 4)
-				grid.addWidget(widgets["footer"][-1], 4, 0, 1, 4)
+				grid.addWidget(widgets["exit_dnds"][-1], 0, 0, 1, 4)
+				grid.addWidget(widgets["header"][-1], 1, 0, 1, 4)
+				grid.addWidget(widgets["start_dds"][-1], 2, 0, 1, 2)
+				grid.addWidget(widgets["start_lds"][-1], 2, 2, 1, 2)
+				grid.addWidget(widgets["start_ods"][-1], 3, 0, 1, 2)
+				grid.addWidget(widgets["start_pds"][-1], 3, 2, 1, 2)
+				grid.addWidget(widgets["start_dnds"][-1], 4, 0, 1, 4)
+				grid.addWidget(widgets["footer"][-1], 5, 0, 1, 4)
 			
 			except TypeError or ValueError or AttributeError:
 				pass
