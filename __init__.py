@@ -44,15 +44,16 @@ widgets = {
 # Stylesheet for light mode
 light_style = """
 	*{
-		color: #808080;}
+		color: #7F7F7F;}
 		
 	#centralwidget{
 		background: #F0EBEB;
 		border-radius: 20%;}
 	
 	#button{
-		background: #E6E1E1;
-		border: 2px solid #E6D2D2;
+		color: #CCCCCC;
+		border: 1px solid #FF1937;
+		background: #372D2D;
 		border-radius : 30%;
 		font-size: 20px;
 		width: 50px;
@@ -61,11 +62,12 @@ light_style = """
 		margin: 15%;}
 		
 	#button:hover{
-		background: #E6DCDC;}
+		background: #AF0F23;
+		border: 1px solid #343030;}
 	
 	#label{
 		font-size: 20px;
-		border-radius: 30%;}
+		border-radius: 10%;}
 	
 	#header{
 		font-weight: bold;
@@ -73,15 +75,16 @@ light_style = """
 		margin-top: 5%}
 
 	#exit_button{
-		color: #EEEEEE;
-		background: #E66464;
+		background: #F0EBEB;
 		font-size: 20px;
 		font-weight: bold;
 		border-radius : 12px;
 		padding: 1%;}
 		
 	#exit_button:hover{
-		background: #E63232;}
+		color: #CCCCCC;
+		background: #AF0F23;
+		border: 1px solid #343030;}
 	
 	#theme_change{
 		background: url(dependencies/images/sun.png) repeat-x left top;
@@ -100,16 +103,17 @@ light_style = """
 # Stylesheet for light mode
 dark_style = """
 	*{
-		color: #CCCCCC;}
+		color: #B3B3B3;}
 		
 	#centralwidget{
-		background: #191919;
+		background: #282323;
 		border-radius: 20%;}
 	
 	#button{
+		color: #cccccc;
+		border: 1px solid #7D0A19;
 		background: #191414;
 		font-size: 20px;
-		border:2px solid #c80505;
 		border-radius : 30%;
 		width: 50px;
 		height: 50px;
@@ -117,12 +121,12 @@ dark_style = """
 		margin: 15%;}
 
 	#button:hover{
-		background: #AE082A;}
+		background: #7D0A19;
+		border: 1px solid #343030;}
 
 	#label{
 		font-size: 20px;
 		border-radius: 30%;}
-	#label:hover{}
 
 	#header{
 		font-weight: bold;
@@ -130,14 +134,15 @@ dark_style = """
 		margin-top: 5%}
 
 	#exit_button{
-		background: #AE082A;
+		background: #191414;
 		font-size: 20px;
 		font-weight: bold;
 		border-radius : 12px;
 		padding: 1%;}
 
 	#exit_button:hover{
-		border:1px solid #EEEEEE;}
+		background: #7D0A19;
+		border: 1px solid #343030;}
 	
 	#theme_change{
 		background: url(dependencies/images/moon.png) repeat-x left top;
@@ -151,8 +156,7 @@ dark_style = """
 		
 	#footer{
 		font-size: 14px;
-		margin-bottom: 5%}
-	"""
+		margin-bottom: 5%}"""
 
 
 # Driving Negligence Dissuader System main class
@@ -169,9 +173,23 @@ class DNDS(QWidget):
 	
 	# Close event to exit the application
 	def closeEvent(self, event):
+		# Confirmation box asking user if they want to exit
 		confirm_close = QMessageBox()
-		self.setAttribute(Qt.WA_TranslucentBackground)
-		confirm_close.setWindowOpacity(0.9)
+		# confirmation box styling
+		confirm_close.setStyleSheet("""
+		*{	color: #CCCCCC;
+			background: #231E1E;}
+		QLabel{
+			font-size: 16px;}
+		QPushButton{
+			color:#CCCCCC;
+			padding:5px;
+			font-size: 14px;
+			border-radius:13px;
+			background: #191414;}
+		QPushButton:hover{
+			background: #AF0F23;}""")
+		confirm_close.setWindowOpacity(0.95)
 		confirm_close.setText("Close Application?")
 		confirm_close.setStandardButtons(QMessageBox.Close | QMessageBox.Cancel)
 		confirm_close = confirm_close.exec()
@@ -214,7 +232,7 @@ class DNDS(QWidget):
 				self.setStyleSheet(light_style)
 			# Keep the default style to light
 			else:
-				self.setStyleSheet(light_style)
+				self.setStyleSheet(dark_style)
 		
 		# If te application has no stylesheet, set the default stylesheet
 		if self.styleSheet() == "":
