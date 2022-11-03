@@ -22,6 +22,7 @@ widgets = {
 	"start_pds": [],
 	"start_dnds": [],
 	"exit_dnds": [],
+	"theme_change": [],
 	"show_mar_dds": [],
 	"show_ear_dds": [],
 	"stop_button_dds": [],
@@ -39,6 +40,7 @@ widgets = {
 	"status_update_lds": [],
 	"show_detection_stats_ods": [],
 	"show_detection_stats_pds": []}
+
 # Stylesheet for light mode
 light_style = """
 	*{
@@ -81,6 +83,16 @@ light_style = """
 	#exit_button:hover{
 		background: #E63232;}
 	
+	#theme_change{
+		background: url(dependencies/images/sun.png) repeat-x left top;
+		font-size: 20px;
+		font-weight: bold;
+		border-radius : 16px;
+		padding: 1%;}
+
+	#theme_change:hover{
+		background: url(dependencies/images/moon.png) repeat-x left top;}
+	
 	#footer{
 		font-size: 14px;
 		margin-bottom: 5%}"""
@@ -88,16 +100,16 @@ light_style = """
 # Stylesheet for light mode
 dark_style = """
 	*{
-		color: #808080;}
+		color: #CCCCCC;}
 		
 	#centralwidget{
-		background: rgb(15, 15, 15);
+		background: #191919;
 		border-radius: 20%;}
 	
 	#button{
-		color: #EEEEEE;
+		background: #191414;
 		font-size: 20px;
-		border:1.5px solid #AE082A;
+		border:2px solid #c80505;
 		border-radius : 30%;
 		width: 50px;
 		height: 50px;
@@ -108,19 +120,16 @@ dark_style = """
 		background: #AE082A;}
 
 	#label{
-		color: #EEEEEE;
 		font-size: 20px;
 		border-radius: 30%;}
 	#label:hover{}
 
 	#header{
-		color: #EEEEEE;
 		font-weight: bold;
 		font-size: 48px;
 		margin-top: 5%}
 
 	#exit_button{
-		color: #EEEEEE;
 		background: #AE082A;
 		font-size: 20px;
 		font-weight: bold;
@@ -129,9 +138,18 @@ dark_style = """
 
 	#exit_button:hover{
 		border:1px solid #EEEEEE;}
+	
+	#theme_change{
+		background: url(dependencies/images/moon.png) repeat-x left top;
+		font-size: 20px;
+		font-weight: bold;
+		border-radius : 16px;
+		padding: 1%;}
 
+	#theme_change:hover{
+		background: url(dependencies/images/sun.png) repeat-x left top;}
+		
 	#footer{
-		color: #EEEEEE;
 		font-size: 14px;
 		margin-bottom: 5%}
 	"""
@@ -163,11 +181,12 @@ class DNDS(QWidget):
 		elif confirm_close == QMessageBox.Cancel:
 			pass
 	
+	# Method to center the window frame
 	def center(self):
-		qr = self.frameGeometry()
-		cp = QDesktopWidget().availableGeometry().center()
-		qr.moveCenter(cp)
-		self.move(qr.topLeft())
+		geometry = self.frameGeometry()
+		screen_center_point = QDesktopWidget().availableGeometry().center()
+		geometry.moveCenter(screen_center_point)
+		self.move(geometry.topLeft())
 	
 	def __init__(self, *args, **kwargs):
 		super(DNDS, self).__init__(*args, **kwargs)
@@ -185,15 +204,29 @@ class DNDS(QWidget):
 		self.setAttribute(Qt.WA_TranslucentBackground)
 		self.setWindowOpacity(0.99)
 		
-		# Set the stylesheet
-		self.setStyleSheet(light_style)
+		# Method to set application theme
+		def set_style():
+			# If current style is light, change it to dark
+			if self.styleSheet() == light_style:
+				self.setStyleSheet(dark_style)
+			# If current style is dark, change it to light
+			elif self.styleSheet() == dark_style:
+				self.setStyleSheet(light_style)
+			# Keep the default style to light
+			else:
+				self.setStyleSheet(light_style)
 		
+		# If te application has no stylesheet, set the default stylesheet
+		if self.styleSheet() == "":
+			set_style()
+		
+		# Make video frame corners round
 		def make_frame_rounded(widget, video_frame, antialiasing=True):
 			# set Min Max size for video label widget
 			widget.setMaximumSize(widget.width(), widget.height())
 			widget.setMinimumSize(widget.width(), widget.height())
 			# Roundness of the corners
-			radius = 10
+			radius = 20
 			# The final frame that is to be set onto the Qlabel
 			final_rounded_frame = QPixmap(widget.size())
 			final_rounded_frame.fill(Qt.transparent)
@@ -264,7 +297,6 @@ class DNDS(QWidget):
 			shadow.setColor(QColor(75, 75, 75, 75))
 			shadow.setOffset(2.5, 7.5)
 			button.setGraphicsEffect(shadow)
-
 			# Return the button
 			return button
 		
@@ -635,15 +667,32 @@ class DNDS(QWidget):
 		
 		# Home page of Drowsiness dissuader system
 		def home_page():
-			self.setFixedSize(850, 650)
+			# Center the window and set a fixed size
 			self.center()
-			# header widget
-			header = create_label()
-			header.setObjectName("header")
-			header.setText("Driving Negligence Dissuader")
-			header.setAlignment(QtCore.Qt.AlignCenter)
-			widgets["header"].append(header)
+			self.setFixedSize(850, 650)
+			
 			try:
+				# header widget
+				header = create_label()
+				header.setObjectName("header")
+				header.setText("Driving Negligence Dissuader")
+				header.setAlignment(QtCore.Qt.AlignCenter)
+				widgets["header"].append(header)
+				
+				# Exit Driving Negligence Dissuader System button
+				exit_dnds = create_button("X")
+				exit_dnds.setObjectName("exit_button")
+				exit_dnds.clicked.connect(self.closeEvent)
+				exit_dnds.setFixedSize(25, 25)
+				widgets["exit_dnds"].append(exit_dnds)
+				
+				# Change application stylesheet button
+				theme_change = create_button("")
+				theme_change.setObjectName("theme_change")
+				theme_change.clicked.connect(partial(set_style))
+				theme_change.setFixedSize(32, 32)
+				widgets["theme_change"].append(theme_change)
+				
 				# Start Drowsiness Detection System button
 				start_dds = create_button("Drowsiness Detection")
 				start_dds.clicked.connect(partial(start_operation, "DDS"))
@@ -669,13 +718,6 @@ class DNDS(QWidget):
 				start_dnds.clicked.connect(partial(start_operation, "DNDS"))
 				widgets["start_dnds"].append(start_dnds)
 				
-				# Exit Driving Negligence Dissuader System button
-				exit_dnds = create_button("X")
-				exit_dnds.setObjectName("exit_button")
-				exit_dnds.clicked.connect(self.closeEvent)
-				exit_dnds.setFixedSize(25, 25)
-				widgets["exit_dnds"].append(exit_dnds)
-				
 				# footer widget
 				footer = create_label()
 				footer.setObjectName("footer")
@@ -689,7 +731,8 @@ class DNDS(QWidget):
 				widgets["footer"].append(footer)
 				
 				# place widgets on the grid
-				grid.addWidget(widgets["exit_dnds"][-1], 0, 0, 1, 4)
+				grid.addWidget(widgets["exit_dnds"][-1], 0, 0, 1, 1)
+				grid.addWidget(widgets["theme_change"][-1], 0, 3, 1, 1)
 				grid.addWidget(widgets["header"][-1], 1, 0, 1, 4)
 				grid.addWidget(widgets["start_dds"][-1], 2, 0, 1, 2)
 				grid.addWidget(widgets["start_lds"][-1], 2, 2, 1, 2)
