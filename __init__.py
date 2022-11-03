@@ -39,6 +39,102 @@ widgets = {
 	"status_update_lds": [],
 	"show_detection_stats_ods": [],
 	"show_detection_stats_pds": []}
+# Stylesheet for light mode
+light_style = """
+	*{
+		color: #808080;}
+		
+	#centralwidget{
+		background: #F0EBEB;
+		border-radius: 20%;}
+	
+	#button{
+		background: #E6E1E1;
+		border: 2px solid #E6D2D2;
+		border-radius : 30%;
+		font-size: 20px;
+		width: 50px;
+		height: 50px;
+		padding: 5%;
+		margin: 15%;}
+		
+	#button:hover{
+		background: #E6DCDC;}
+	
+	#label{
+		font-size: 20px;
+		border-radius: 30%;}
+	
+	#header{
+		font-weight: bold;
+		font-size: 48px;
+		margin-top: 5%}
+
+	#exit_button{
+		color: #EEEEEE;
+		background: #E66464;
+		font-size: 20px;
+		font-weight: bold;
+		border-radius : 12px;
+		padding: 1%;}
+		
+	#exit_button:hover{
+		background: #E63232;}
+	
+	#footer{
+		font-size: 14px;
+		margin-bottom: 5%}"""
+
+# Stylesheet for light mode
+dark_style = """
+	*{
+		color: #808080;}
+		
+	#centralwidget{
+		background: rgb(15, 15, 15);
+		border-radius: 20%;}
+	
+	#button{
+		color: #EEEEEE;
+		font-size: 20px;
+		border:1.5px solid #AE082A;
+		border-radius : 30%;
+		width: 50px;
+		height: 50px;
+		padding: 5%;
+		margin: 15%;}
+
+	#button:hover{
+		background: #AE082A;}
+
+	#label{
+		color: #EEEEEE;
+		font-size: 20px;
+		border-radius: 30%;}
+	#label:hover{}
+
+	#header{
+		color: #EEEEEE;
+		font-weight: bold;
+		font-size: 48px;
+		margin-top: 5%}
+
+	#exit_button{
+		color: #EEEEEE;
+		background: #AE082A;
+		font-size: 20px;
+		font-weight: bold;
+		border-radius : 12px;
+		padding: 1%;}
+
+	#exit_button:hover{
+		border:1px solid #EEEEEE;}
+
+	#footer{
+		color: #EEEEEE;
+		font-size: 14px;
+		margin-bottom: 5%}
+	"""
 
 
 # Driving Negligence Dissuader System main class
@@ -57,7 +153,7 @@ class DNDS(QWidget):
 	def closeEvent(self, event):
 		confirm_close = QMessageBox()
 		self.setAttribute(Qt.WA_TranslucentBackground)
-		confirm_close.setWindowOpacity(0.85)
+		confirm_close.setWindowOpacity(0.9)
 		confirm_close.setText("Close Application?")
 		confirm_close.setStandardButtons(QMessageBox.Close | QMessageBox.Cancel)
 		confirm_close = confirm_close.exec()
@@ -83,15 +179,14 @@ class DNDS(QWidget):
 		self.setLayout(grid)
 		self.setFont(QFont("Nunito"))
 		self.centralwidget = QWidget(self)
+		self.centralwidget.setObjectName("centralwidget")
 		self.centralwidget.resize(850, 650)
 		self.setWindowFlag(Qt.FramelessWindowHint)
 		self.setAttribute(Qt.WA_TranslucentBackground)
 		self.setWindowOpacity(0.99)
 		
-		self.centralwidget.setStyleSheet("""
-			background: rgb(15, 15, 15);
-			border-radius: 20%;
-			""")
+		# Set the stylesheet
+		self.setStyleSheet(light_style)
 		
 		def make_frame_rounded(widget, video_frame, antialiasing=True):
 			# set Min Max size for video label widget
@@ -159,29 +254,17 @@ class DNDS(QWidget):
 		def create_button(button_text):
 			# Create button
 			button = QPushButton(button_text)
+			button.setObjectName("button")
 			# Change cursor to Pointing hand upon hover
 			button.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
 			# Creating shadow object
 			shadow = QGraphicsDropShadowEffect()
 			# setting blur radius (optional step)
-			shadow.setBlurRadius(75)
-			shadow.setColor(QColor(125, 25, 25))
-			shadow.setOffset(-2.5, 2.5)
+			shadow.setBlurRadius(15)
+			shadow.setColor(QColor(75, 75, 75, 75))
+			shadow.setOffset(2.5, 7.5)
 			button.setGraphicsEffect(shadow)
-			# CSS styling of the button
-			button.setStyleSheet("""
-				*{
-					color: #EEEEEE;
-					font-size: 20px;
-					border:1.5px solid #AE082A;
-					border-radius : 30%;
-					width: 50px;
-					height: 50px;
-					padding: 5%;
-					margin: 15%;}
-					
-				*:hover{
-				background: #AE082A;}""")
+
 			# Return the button
 			return button
 		
@@ -189,14 +272,8 @@ class DNDS(QWidget):
 		def create_label():
 			# Create label
 			label = QLabel()
+			label.setObjectName("label")
 			label.setAlignment(QtCore.Qt.AlignCenter)
-			# CSS styling of the button
-			label.setStyleSheet("""
-				*{
-					color: #EEEEEE;
-					font-size: 20px;
-					border-radius: 30%;}
-				*:hover{}""")
 			# Return the label
 			return label
 		
@@ -502,7 +579,7 @@ class DNDS(QWidget):
 			
 			try:
 				# Call Lane detection system and receive the widgets
-				lane_detection_system,\
+				lane_detection_system, \
 					video_feed_lds, \
 					show_curve_radius, \
 					show_curve_offset, \
@@ -510,7 +587,7 @@ class DNDS(QWidget):
 					stop_button_lds = page_lds(return_items=True)
 				# Call Drowsiness detection system and receive the widgets
 				drowsiness_detection_system, \
-					video_feed_dds,\
+					video_feed_dds, \
 					show_ear, show_mar, \
 					status_update_dds, \
 					stop_button_dds = page_dds(return_items=True)
@@ -562,14 +639,9 @@ class DNDS(QWidget):
 			self.center()
 			# header widget
 			header = create_label()
+			header.setObjectName("header")
 			header.setText("Driving Negligence Dissuader")
 			header.setAlignment(QtCore.Qt.AlignCenter)
-			# CSS styling of the button
-			header.setStyleSheet("""*{
-				color: #EEEEEE;
-				font-weight: bold;
-				font-size: 48px;
-				margin-top: 5%}""")
 			widgets["header"].append(header)
 			try:
 				# Start Drowsiness Detection System button
@@ -599,22 +671,14 @@ class DNDS(QWidget):
 				
 				# Exit Driving Negligence Dissuader System button
 				exit_dnds = create_button("X")
+				exit_dnds.setObjectName("exit_button")
 				exit_dnds.clicked.connect(self.closeEvent)
 				exit_dnds.setFixedSize(25, 25)
-				exit_dnds.setStyleSheet("""*{
-					color: #EEEEEE;
-					background: #AE082A;
-					font-size: 20px;
-					font-weight: bold;
-					border-radius : 12px;
-					padding: 1%;}
-					
-				*:hover{
-					border:1px solid #EEEEEE;}""")
 				widgets["exit_dnds"].append(exit_dnds)
 				
 				# footer widget
 				footer = create_label()
+				footer.setObjectName("footer")
 				footer_text = \
 					'Driving Negligence Dissuader System (DNDS) is a vehicle safety system to detect drivers ' \
 					'drowsiness and yawning.\nThe system also monitors the road in front to detect the road lanes ' \
@@ -622,11 +686,6 @@ class DNDS(QWidget):
 				footer.setAlignment(QtCore.Qt.AlignCenter)
 				footer.setText(footer_text)
 				footer.setWordWrap(True)
-				
-				footer.setStyleSheet("""*{
-					color: #EEEEEE;
-					font-size: 14px;
-					margin-bottom: 5%}""")
 				widgets["footer"].append(footer)
 				
 				# place widgets on the grid
