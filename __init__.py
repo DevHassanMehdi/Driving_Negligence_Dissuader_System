@@ -21,7 +21,7 @@ widgets = {
 	"start_ods": [],
 	"start_pds": [],
 	"start_dnds": [],
-	"exit_dnds": [],
+	"close_reset_dnds": [],
 	"theme_change": [],
 	"show_mar_dds": [],
 	"show_ear_dds": [],
@@ -74,14 +74,14 @@ light_style = """
 		font-size: 48px;
 		margin-top: 5%}
 
-	#exit_button{
+	#close_reset_button{
 		background: #F0EBEB;
 		font-size: 20px;
 		font-weight: bold;
 		border-radius : 12px;
 		padding: 1%;}
 		
-	#exit_button:hover{
+	#close_reset_button:hover{
 		color: #CCCCCC;
 		background: #AF0F23;
 		border: 1px solid #343030;}
@@ -133,14 +133,14 @@ dark_style = """
 		font-size: 48px;
 		margin-top: 5%}
 
-	#exit_button{
+	#close_reset_button{
 		background: #191414;
 		font-size: 20px;
 		font-weight: bold;
 		border-radius : 12px;
 		padding: 1%;}
 
-	#exit_button:hover{
+	#close_reset_button:hover{
 		background: #7D0A19;
 		border: 1px solid #343030;}
 	
@@ -171,34 +171,6 @@ class DNDS(QWidget):
 		self.move(self.x() + movement.x(), self.y() + movement.y())
 		self.old_position = event.globalPos()
 	
-	# Close event to exit the application
-	def closeEvent(self, event):
-		# Confirmation box asking user if they want to exit
-		confirm_close = QMessageBox()
-		# confirmation box styling
-		confirm_close.setStyleSheet("""
-		*{	color: #CCCCCC;
-			background: #231E1E;}
-		QLabel{
-			font-size: 16px;}
-		QPushButton{
-			color:#CCCCCC;
-			padding:5px;
-			font-size: 14px;
-			border-radius:13px;
-			background: #191414;}
-		QPushButton:hover{
-			background: #AF0F23;}""")
-		confirm_close.setWindowOpacity(0.95)
-		confirm_close.setText("Close Application?")
-		confirm_close.setStandardButtons(QMessageBox.Close | QMessageBox.Cancel)
-		confirm_close = confirm_close.exec()
-		# If user confirms close then exit app otherwise ignore
-		if confirm_close == QMessageBox.Close:
-			sys.exit()
-		elif confirm_close == QMessageBox.Cancel:
-			pass
-	
 	# Method to center the window frame
 	def center(self):
 		geometry = self.frameGeometry()
@@ -206,6 +178,7 @@ class DNDS(QWidget):
 		geometry.moveCenter(screen_center_point)
 		self.move(geometry.topLeft())
 	
+	# The Init Methods
 	def __init__(self, *args, **kwargs):
 		super(DNDS, self).__init__(*args, **kwargs)
 		# Current window position
@@ -213,6 +186,7 @@ class DNDS(QWidget):
 		# Layout and window settings
 		grid = QGridLayout()
 		grid.setSpacing(10)
+		self.center()
 		self.setLayout(grid)
 		self.setFont(QFont("Nunito"))
 		self.centralwidget = QWidget(self)
@@ -295,6 +269,38 @@ class DNDS(QWidget):
 			
 			# Resize central widget
 			self.centralwidget.resize(self.width(), self.height())
+		
+		# Method to Close/reset DNDS
+		def close_application():
+			# Confirmation box asking user if they want to close or Reset DNDS
+			confirm_close_reset = QMessageBox()
+			# confirmation box styling
+			confirm_close_reset.setStyleSheet("""
+					*{	color: #CCCCCC;
+						background: #231E1E;}
+					QLabel{
+						font-size: 16px;}
+					QPushButton{
+						color:#CCCCCC;
+						padding:5px;
+						font-size: 14px;
+						border-radius:13px;
+						background: #191414;}
+					QPushButton:hover{
+						background: #AF0F23;}""")
+			confirm_close_reset.setWindowOpacity(0.95)
+			confirm_close_reset.setText("Close Application?")
+			confirm_close_reset.setStandardButtons(QMessageBox.Cancel | QMessageBox.Close | QMessageBox.Reset)
+			confirm_close_reset = confirm_close_reset.exec()
+			# If user confirms close then exit app
+			if confirm_close_reset == QMessageBox.Close:
+				sys.exit()
+			# If user confirms reset then restart app
+			elif confirm_close_reset == QMessageBox.Reset:
+				os.execl(sys.executable, sys.executable, *sys.argv)
+			# Else cancel
+			else:
+				pass
 		
 		# Methods to clear all the widgets in current page when switching to another page
 		def clear_widgets():
@@ -667,11 +673,11 @@ class DNDS(QWidget):
 				widgets["header"].append(header)
 				
 				# Exit Driving Negligence Dissuader System button
-				exit_dnds = create_button("X")
-				exit_dnds.setObjectName("exit_button")
-				exit_dnds.clicked.connect(self.closeEvent)
-				exit_dnds.setFixedSize(25, 25)
-				widgets["exit_dnds"].append(exit_dnds)
+				close_reset_dnds = create_button("X")
+				close_reset_dnds.setObjectName("close_reset_button")
+				close_reset_dnds.clicked.connect(close_application)
+				close_reset_dnds.setFixedSize(25, 25)
+				widgets["close_reset_dnds"].append(close_reset_dnds)
 				
 				# Change application stylesheet button
 				theme_change = create_button("")
@@ -718,7 +724,7 @@ class DNDS(QWidget):
 				widgets["footer"].append(footer)
 				
 				# place widgets on the grid
-				grid.addWidget(widgets["exit_dnds"][-1], 0, 0, 1, 1)
+				grid.addWidget(widgets["close_reset_dnds"][-1], 0, 0, 1, 1)
 				grid.addWidget(widgets["theme_change"][-1], 0, 3, 1, 1)
 				grid.addWidget(widgets["header"][-1], 1, 0, 1, 4)
 				grid.addWidget(widgets["start_dds"][-1], 2, 0, 1, 2)
