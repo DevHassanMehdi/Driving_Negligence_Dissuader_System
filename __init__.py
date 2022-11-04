@@ -273,22 +273,25 @@ class DNDS(QWidget):
 		# Call clear widgets method and switch to the called page
 		def start_operation(operation_id):
 			clear_widgets()
+			
+			if operation_id == "HOME":
+				self.setFixedSize(850, 650)
+				home_page()
 			if operation_id == "DDS":
+				self.setFixedSize(850, 650)
 				page_dds(return_items=False)
-				self.setFixedSize(850, 650)
 			if operation_id == "LDS":
+				self.setFixedSize(850, 650)
 				page_lds(return_items=False)
-				self.setFixedSize(850, 650)
 			if operation_id == "ODS":
+				self.setFixedSize(850, 650)
 				page_ods(return_items=False)
-				self.setFixedSize(850, 650)
 			if operation_id == "PDS":
-				page_pds(return_items=False)
 				self.setFixedSize(850, 650)
+				page_pds(return_items=False)
 			if operation_id == "DNDS":
-				page_dnds()
 				self.setFixedSize(1200, 850)
-				self.center()
+				page_dnds()
 			
 			# Resize central widget
 			self.centralwidget.resize(self.width(), self.height())
@@ -298,6 +301,7 @@ class DNDS(QWidget):
 			for widget in widgets:
 				if widgets[widget]:
 					widgets[widget][-1].hide()
+					grid.removeWidget(widgets[widget][-1])
 				for i in range(0, len(widgets[widget])):
 					widgets[widget].pop()
 		
@@ -654,10 +658,6 @@ class DNDS(QWidget):
 		
 		# Home page of Drowsiness dissuader system
 		def home_page():
-			# Center the window and set a fixed size
-			self.center()
-			self.setFixedSize(850, 650)
-			
 			try:
 				# header widget
 				header = create_label()
@@ -725,14 +725,14 @@ class DNDS(QWidget):
 				grid.addWidget(widgets["start_lds"][-1], 2, 2, 1, 2)
 				grid.addWidget(widgets["start_ods"][-1], 3, 0, 1, 2)
 				grid.addWidget(widgets["start_pds"][-1], 3, 2, 1, 2)
-				grid.addWidget(widgets["start_dnds"][-1], 4, 0, 1, 4)
+				# grid.addWidget(widgets["start_dnds"][-1], 4, 0, 1, 4)
 				grid.addWidget(widgets["footer"][-1], 5, 0, 1, 4)
 			
 			except TypeError or ValueError or AttributeError:
 				pass
 		
 		# Start the home page uon launching the application
-		home_page()
+		start_operation("HOME")
 
 
 # Initialize the application and create the window object in main method
