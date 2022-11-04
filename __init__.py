@@ -289,7 +289,7 @@ class DNDS(QWidget):
 					QPushButton:hover{
 						background: #AF0F23;}""")
 			confirm_close_reset.setWindowOpacity(0.95)
-			confirm_close_reset.setText("Close Application?")
+			confirm_close_reset.setText("Driving Negligence Dissuader")
 			confirm_close_reset.setStandardButtons(QMessageBox.Cancel | QMessageBox.Close | QMessageBox.Reset)
 			confirm_close_reset = confirm_close_reset.exec()
 			# If user confirms close then exit app
