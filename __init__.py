@@ -390,24 +390,18 @@ class DNDS(QWidget):
 				if return_items:
 					# Set Frame size according to the window
 					video_feed_dds.setFixedSize(560, 315)
-					return \
-						drowsiness_detection_system, \
-						video_feed_dds, \
-						show_ear, \
-						show_mar, \
-						status_update_dds, \
-						stop_button_dds
+					return drowsiness_detection_system
 				# Display the widgets in separate page
 				else:
 					# Set Frame size according to the window
 					video_feed_dds.setFixedSize(800, 450)
 					
 					# place widgets on the grid
-					grid.addWidget(show_ear, 0, 0, 1, 2)
-					grid.addWidget(show_mar, 0, 2, 1, 2)
-					grid.addWidget(video_feed_dds, 1, 0, 1, 4)
-					grid.addWidget(status_update_dds, 2, 0, 1, 4)
-					grid.addWidget(stop_button_dds, 3, 0, 1, 4)
+					grid.addWidget(widgets["show_ear_dds"][-1], 0, 0, 1, 2)
+					grid.addWidget(widgets["show_mar_dds"][-1], 0, 2, 1, 2)
+					grid.addWidget(widgets["video_feed_dds"][-1], 1, 0, 1, 4)
+					grid.addWidget(widgets["status_update_dds"][-1], 2, 0, 1, 4)
+					grid.addWidget(widgets["stop_button_dds"][-1], 3, 0, 1, 4)
 			
 			except TypeError or ValueError or AttributeError:
 				pass
@@ -475,22 +469,16 @@ class DNDS(QWidget):
 				if return_items:
 					# Set Frame size according to the window
 					video_feed_lds.setFixedSize(560, 315)
-					return \
-						lane_detection_system, \
-						video_feed_lds, \
-						show_curve_radius, \
-						show_curve_offset, \
-						status_update_lds, \
-						stop_button_lds
+					return lane_detection_system
 				# Show the widgets in a separate page
 				else:
 					# Set Frame size according to the window
 					video_feed_lds.setFixedSize(800, 450)
-					grid.addWidget(show_curve_radius, 0, 0, 1, 2)
-					grid.addWidget(show_curve_offset, 0, 2, 1, 2)
-					grid.addWidget(video_feed_lds, 1, 0, 1, 4)
-					grid.addWidget(status_update_lds, 2, 0, 1, 4)
-					grid.addWidget(stop_button_lds, 3, 0, 1, 4)
+					grid.addWidget(widgets["show_curve_radius_lds"][-1], 0, 0, 1, 2)
+					grid.addWidget(widgets["show_curve_offset_lds"][-1], 0, 2, 1, 2)
+					grid.addWidget(widgets["video_feed_lds"][-1], 1, 0, 1, 4)
+					grid.addWidget(widgets["status_update_lds"][-1], 2, 0, 1, 4)
+					grid.addWidget(widgets["stop_button_lds"][-1], 3, 0, 1, 4)
 			
 			except TypeError or ValueError or AttributeError:
 				pass
@@ -539,18 +527,14 @@ class DNDS(QWidget):
 				if return_items:
 					# Set Frame size according to the window
 					video_feed_ods.setFixedSize(560, 315)
-					return \
-						object_detection_system, \
-						video_feed_ods, \
-						show_detection_stats, \
-						stop_button_ods
+					return object_detection_system
 				# Show the widgets in a separate page
 				else:
 					# Set Frame size according to the window
 					video_feed_ods.setFixedSize(800, 450)
-					grid.addWidget(show_detection_stats, 0, 0, 1, 4)
-					grid.addWidget(video_feed_ods, 1, 0, 1, 4)
-					grid.addWidget(stop_button_ods, 2, 0, 1, 4)
+					grid.addWidget(widgets["show_detection_stats_ods"][-1], 0, 0, 1, 4)
+					grid.addWidget(widgets["video_feed_ods"][-1], 1, 0, 1, 4)
+					grid.addWidget(widgets["stop_button_ods"][-1], 2, 0, 1, 4)
 			
 			except TypeError or ValueError or AttributeError:
 				pass
@@ -608,9 +592,9 @@ class DNDS(QWidget):
 				else:
 					# Set Frame size according to the window
 					video_feed_pds.setFixedSize(800, 450)
-					grid.addWidget(show_detection_stats_pds, 0, 0, 1, 4)
-					grid.addWidget(video_feed_pds, 1, 0, 1, 4)
-					grid.addWidget(stop_button_pds, 2, 0, 1, 4)
+					grid.addWidget(widgets["show_detection_stats_pds"][-1], 0, 0, 1, 4)
+					grid.addWidget(widgets["video_feed_pds"][-1], 1, 0, 1, 4)
+					grid.addWidget(widgets["stop_button_pds"][-1], 2, 0, 1, 4)
 			
 			except TypeError or ValueError or AttributeError:
 				pass
@@ -629,28 +613,13 @@ class DNDS(QWidget):
 			
 			try:
 				# Call Lane detection system and receive the widgets
-				lane_detection_system, \
-					video_feed_lds, \
-					show_curve_radius, \
-					show_curve_offset, \
-					status_update_lds, \
-					stop_button_lds = page_lds(return_items=True)
+				lane_detection_system = page_lds(return_items=True)
 				# Call Drowsiness detection system and receive the widgets
-				drowsiness_detection_system, \
-					video_feed_dds, \
-					show_ear, show_mar, \
-					status_update_dds, \
-					stop_button_dds = page_dds(return_items=True)
+				drowsiness_detection_system = page_dds(return_items=True)
 				# Call Object detection system and receive the widgets
-				object_detection_system, \
-					video_feed_ods, \
-					show_detection_stats, \
-					stop_button_ods = page_ods(return_items=True)
+				object_detection_system = page_ods(return_items=True)
 				# Call Pedestrian detection system and receive the widgets
-				# pedestrian_detection_system,
-				# 	video_feed_pds,
-				# 	show_detection_stats_pds,
-				# 	stop_button_pds = page_pds(return_items=True)
+				# pedestrian_detection_system = page_pds(return_items=True)
 				
 				# Create stop button that will call the stop_operation method
 				stop_button_dnds = create_button("Stop")
@@ -658,27 +627,27 @@ class DNDS(QWidget):
 				widgets["stop_button_dnds"].append(stop_button_dnds)
 				
 				# place DDS widgets on the grid
-				grid.addWidget(show_ear, 0, 0, 1, 1)
-				grid.addWidget(show_mar, 0, 1, 1, 1)
-				grid.addWidget(video_feed_dds, 1, 0, 1, 2)
-				grid.addWidget(status_update_dds, 2, 0, 1, 2)
+				grid.addWidget(widgets["show_ear_dds"][-1], 0, 0, 1, 1)
+				grid.addWidget(widgets["show_mar_dds"][-1], 0, 1, 1, 1)
+				grid.addWidget(widgets["video_feed_dds"][-1], 1, 0, 1, 2)
+				grid.addWidget(widgets["status_update_dds"][-1], 2, 0, 1, 2)
 				
 				# place LDS widgets on the grid
-				grid.addWidget(show_curve_radius, 0, 2, 1, 1)
-				grid.addWidget(show_curve_offset, 0, 3, 1, 1)
-				grid.addWidget(video_feed_lds, 1, 2, 1, 2)
-				grid.addWidget(status_update_lds, 2, 2, 1, 2)
+				grid.addWidget(widgets["show_curve_radius_lds"][-1], 0, 2, 1, 1)
+				grid.addWidget(widgets["show_curve_offset_lds"][-1], 0, 3, 1, 1)
+				grid.addWidget(widgets["video_feed_lds"][-1], 1, 2, 1, 2)
+				grid.addWidget(widgets["status_update_lds"][-1], 2, 2, 1, 2)
 				
 				# place ODS widgets on the grid
-				grid.addWidget(show_detection_stats, 4, 0, 1, 2)
-				grid.addWidget(video_feed_ods, 5, 0, 1, 2)
+				grid.addWidget(widgets["show_detection_stats_ods"][-1], 4, 0, 1, 2)
+				grid.addWidget(widgets["video_feed_ods"][-1], 5, 0, 1, 2)
 				
 				# # place PDS widgets on the grid
-				# grid.addWidget(show_detection_stats_pds, 4, 2, 1, 2)
-				# grid.addWidget(video_feed_pds, 5, 2, 1, 2)
+				# grid.addWidget(widgets["show_detection_stats_pds"][-1], 4, 2, 1, 2)
+				# grid.addWidget(widgets["video_feed_pds"][-1], 5, 2, 1, 2)
 				#
 				# place the stop widget on the grid
-				grid.addWidget(stop_button_dnds, 6, 0, 1, 4)
+				grid.addWidget(widgets["stop_button_dnds"][-1], 6, 0, 1, 4)
 			
 			except TypeError or ValueError or AttributeError:
 				pass
