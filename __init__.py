@@ -361,7 +361,7 @@ class DNDS(QWidget):
 			# Method to stop the Drowsiness detection operation and go back to home page
 			def stop_operation():
 				clear_widgets()
-				home_page()
+				start_operation("HOME")
 				drowsiness_detection_system.stop()
 			
 			try:
@@ -415,8 +415,8 @@ class DNDS(QWidget):
 					grid.addWidget(widgets["status_update_dds"][-1], 2, 0, 1, 4)
 					grid.addWidget(widgets["stop_button_dds"][-1], 3, 0, 1, 4)
 			
-			except TypeError or ValueError or AttributeError:
-				pass
+			except TypeError or ValueError or AttributeError or Exception:
+				start_operation("HOME")
 		
 		# Lane Detection System page
 		def page_lds(return_items):
@@ -440,7 +440,7 @@ class DNDS(QWidget):
 			# Method to stop the Lane detection operation and go back to home page
 			def stop_operation():
 				clear_widgets()
-				home_page()
+				start_operation("HOME")
 				lane_detection_system.stop()
 			
 			try:
@@ -492,8 +492,8 @@ class DNDS(QWidget):
 					grid.addWidget(widgets["status_update_lds"][-1], 2, 0, 1, 4)
 					grid.addWidget(widgets["stop_button_lds"][-1], 3, 0, 1, 4)
 			
-			except TypeError or ValueError or AttributeError:
-				pass
+			except TypeError or ValueError or AttributeError or Exception:
+				start_operation("HOME")
 		
 		# Object Detection System page
 		def page_ods(return_items):
@@ -509,7 +509,7 @@ class DNDS(QWidget):
 			# Method to stop the object detection operation and go back to home page
 			def stop_operation():
 				clear_widgets()
-				home_page()
+				start_operation("HOME")
 				object_detection_system.stop()
 			
 			try:
@@ -549,7 +549,7 @@ class DNDS(QWidget):
 					grid.addWidget(widgets["stop_button_ods"][-1], 2, 0, 1, 4)
 			
 			except TypeError or ValueError or AttributeError:
-				pass
+				start_operation("HOME")
 		
 		# Pedestrian Detection System page
 		def page_pds(return_items):
@@ -565,7 +565,7 @@ class DNDS(QWidget):
 			# Method to stop the object detection operation and go back to home page
 			def stop_operation():
 				clear_widgets()
-				home_page()
+				start_operation("HOME")
 				pedestrian_detection_system.stop()
 			
 			try:
@@ -608,15 +608,15 @@ class DNDS(QWidget):
 					grid.addWidget(widgets["video_feed_pds"][-1], 1, 0, 1, 4)
 					grid.addWidget(widgets["stop_button_pds"][-1], 2, 0, 1, 4)
 			
-			except TypeError or ValueError or AttributeError:
-				pass
+			except TypeError or ValueError or AttributeError or Exception:
+				start_operation("HOME")
 		
 		# Drowsiness Dissuader System page
 		def page_dnds():
 			# Method to stop the object detection operation and go back to home page
 			def stop_operation():
 				clear_widgets()
-				home_page()
+				start_operation("HOME")
 				drowsiness_detection_system.stop()
 				lane_detection_system.stop()
 				object_detection_system.stop()
@@ -660,8 +660,8 @@ class DNDS(QWidget):
 				# place the stop widget on the grid
 				grid.addWidget(widgets["stop_button_dnds"][-1], 6, 0, 1, 4)
 			
-			except TypeError or ValueError or AttributeError:
-				pass
+			except TypeError or ValueError or AttributeError or Exception:
+				start_operation("HOME")
 		
 		# Home page of Drowsiness dissuader system
 		def home_page():
@@ -735,8 +735,8 @@ class DNDS(QWidget):
 				grid.addWidget(widgets["start_dnds"][-1], 4, 0, 1, 4)
 				grid.addWidget(widgets["footer"][-1], 5, 0, 1, 4)
 			
-			except TypeError or ValueError or AttributeError:
-				pass
+			except TypeError or ValueError or AttributeError or Exception:
+				start_operation("HOME")
 		
 		# Start the home page uon launching the application
 		start_operation("HOME")

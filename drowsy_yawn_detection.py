@@ -223,7 +223,7 @@ class StartDDS(QThread):
 							status = "Yawning Detected!"
 						else:
 							status = ""
-
+					
 					# Convert the frame from OpenCV format to PyQt5 format
 					frame = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
 					convert_to_qt_format = QImage(
@@ -237,9 +237,10 @@ class StartDDS(QThread):
 					self.DrowsyStats.emit(drowsy_stats)
 					self.YawnStats.emit(yawn_stats)
 					self.Status.emit(status)
-		
-				except TypeError or ValueError or AttributeError:
-					pass
+				
+				except TypeError or ValueError or AttributeError or Exception:
+					self.ThreadActive = False
+					self.wait()
 		# Close all opened windows and stop video Capture
 		video_stream.release()
 		cv.destroyAllWindows()
@@ -247,4 +248,4 @@ class StartDDS(QThread):
 	# Thread stop method (De-Activate the thread and Quit the operation when method is called from GUI window)
 	def stop(self):
 		self.ThreadActive = False
-		self.quit()
+		self.wait()

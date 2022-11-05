@@ -63,8 +63,9 @@ class StartPDS(QThread):
                     self.ImageUpdate.emit(frame)
                     self.TotalPeople.emit(total_people)
         
-                except TypeError or ValueError or AttributeError:
-                    pass
+                except TypeError or ValueError or AttributeError or Exception:
+                    self.ThreadActive = False
+                    self.wait()
         # Close all opened windows and stop video Capture
         video_stream.release()
         cv.destroyAllWindows()
@@ -72,4 +73,4 @@ class StartPDS(QThread):
     # Thread stop method (De-Activate the thread and Quit the operation when method is called from GUI window)
     def stop(self):
         self.ThreadActive = False
-        self.quit()
+        self.wait()
