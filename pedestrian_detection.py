@@ -49,23 +49,22 @@ class StartPDS(QThread):
                         cv.putText(frame, f'P{person}', (x, y), cv.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
                         person += 1
                 
+                    # Set the total detections value string that wil be sent to the GUI frame
+                    total_people = f"People: {person-1}"
+                    # Convert the frame from OpenCV format to PyQt5 format
+                    frame = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
+                    convert_to_qt_format = QImage(
+                        frame.data, frame.shape[1],
+                        frame.shape[0],
+                        QImage.Format_RGB888)
+                    frame = convert_to_qt_format.scaled(640, 360, Qt.KeepAspectRatio)
+                    
+                    # Send the frames and Stats to the GUI window
+                    self.ImageUpdate.emit(frame)
+                    self.TotalPeople.emit(total_people)
+        
                 except TypeError or ValueError or AttributeError:
                     pass
-                
-                # Set the total detections value string that wil be sent to the GUI frame
-                total_people = f"People: {person-1}"
-                # Convert the frame from OpenCV format to PyQt5 format
-                frame = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
-                convert_to_qt_format = QImage(
-                    frame.data, frame.shape[1],
-                    frame.shape[0],
-                    QImage.Format_RGB888)
-                frame = convert_to_qt_format.scaled(640, 360, Qt.KeepAspectRatio)
-                
-                # Send the frames and Stats to the GUI window
-                self.ImageUpdate.emit(frame)
-                self.TotalPeople.emit(total_people)
-        
         # Close all opened windows and stop video Capture
         video_stream.release()
         cv.destroyAllWindows()

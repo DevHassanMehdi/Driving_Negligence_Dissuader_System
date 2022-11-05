@@ -1,11 +1,11 @@
 # PREP DEPENDENCIES
-from PyQt5.QtCore import QPoint
 from drowsy_yawn_detection import *  # Drowsiness detection system
 from object_detection import *  # Object Detection System
 from functools import partial  # To send args with connect command
 from lane_detection import *  # Lane Detection System
 from pedestrian_detection import *
 # PyQt5 items for our GUI application
+from PyQt5.QtCore import QPoint
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5 import QtCore
@@ -186,15 +186,15 @@ class DNDS(QWidget):
 		# Layout and window settings
 		grid = QGridLayout()
 		grid.setSpacing(10)
-		self.center()
-		self.setLayout(grid)
 		self.setFont(QFont("Nunito"))
 		self.centralwidget = QWidget(self)
-		self.centralwidget.setObjectName("centralwidget")
 		self.centralwidget.resize(850, 650)
-		self.setWindowFlag(Qt.FramelessWindowHint)
+		self.centralwidget.setObjectName("centralwidget")
 		self.setAttribute(Qt.WA_TranslucentBackground)
+		self.setWindowFlag(Qt.FramelessWindowHint)
 		self.setWindowOpacity(0.99)
+		self.setLayout(grid)
+		self.center()
 		
 		# Method to set application theme
 		def set_style():
@@ -265,6 +265,7 @@ class DNDS(QWidget):
 				page_pds(return_items=False)
 			if operation_id == "DNDS":
 				self.setFixedSize(1200, 850)
+				self.center()
 				page_dnds()
 			
 			# Resize central widget
@@ -308,6 +309,7 @@ class DNDS(QWidget):
 				if widgets[widget]:
 					widgets[widget][-1].hide()
 					grid.removeWidget(widgets[widget][-1])
+					# widgets[widget][-1].deleteLater()
 				for i in range(0, len(widgets[widget])):
 					widgets[widget].pop()
 		
@@ -359,8 +361,8 @@ class DNDS(QWidget):
 			# Method to stop the Drowsiness detection operation and go back to home page
 			def stop_operation():
 				clear_widgets()
-				drowsiness_detection_system.stop()
 				home_page()
+				drowsiness_detection_system.stop()
 			
 			try:
 				# Create a label to display video on top of it
@@ -438,8 +440,8 @@ class DNDS(QWidget):
 			# Method to stop the Lane detection operation and go back to home page
 			def stop_operation():
 				clear_widgets()
-				lane_detection_system.stop()
 				home_page()
+				lane_detection_system.stop()
 			
 			try:
 				# Create a label to display video on top of it
@@ -507,8 +509,8 @@ class DNDS(QWidget):
 			# Method to stop the object detection operation and go back to home page
 			def stop_operation():
 				clear_widgets()
-				object_detection_system.stop()
 				home_page()
+				object_detection_system.stop()
 			
 			try:
 				# Create a label to display video on top of it
@@ -563,8 +565,8 @@ class DNDS(QWidget):
 			# Method to stop the object detection operation and go back to home page
 			def stop_operation():
 				clear_widgets()
-				pedestrian_detection_system.stop()
 				home_page()
+				pedestrian_detection_system.stop()
 			
 			try:
 				# Create a label to display video on top of it
@@ -614,12 +616,11 @@ class DNDS(QWidget):
 			# Method to stop the object detection operation and go back to home page
 			def stop_operation():
 				clear_widgets()
+				home_page()
 				drowsiness_detection_system.stop()
 				lane_detection_system.stop()
 				object_detection_system.stop()
 				# pedestrian_detection_system.stop()
-				
-				home_page()
 			
 			try:
 				# Call Lane detection system and receive the widgets
@@ -731,7 +732,7 @@ class DNDS(QWidget):
 				grid.addWidget(widgets["start_lds"][-1], 2, 2, 1, 2)
 				grid.addWidget(widgets["start_ods"][-1], 3, 0, 1, 2)
 				grid.addWidget(widgets["start_pds"][-1], 3, 2, 1, 2)
-				# grid.addWidget(widgets["start_dnds"][-1], 4, 0, 1, 4)
+				grid.addWidget(widgets["start_dnds"][-1], 4, 0, 1, 4)
 				grid.addWidget(widgets["footer"][-1], 5, 0, 1, 4)
 			
 			except TypeError or ValueError or AttributeError:

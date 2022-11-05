@@ -613,10 +613,7 @@ class StartLDS(QThread):
 	
 	# Lane Detection begins here (The method will run when the thread starts)
 	def run(self):
-		curve_radius = ""
-		curve_offset = ""
-		status = ""
-		
+
 		# Activating thread
 		self.ThreadActive = True
 		global output
@@ -662,9 +659,6 @@ class StartLDS(QThread):
 						status = "Stay In Your Lane!"
 					else:
 						status = ""
-				except TypeError or ValueError or AttributeError:
-					pass
-				try:
 					# Convert the frame from OpenCV format to PyQt5 format
 					frame = cv.cvtColor(frame_with_lane_lines, cv.COLOR_BGR2RGB)
 					convert_to_qt_format = QImage(
@@ -678,10 +672,9 @@ class StartLDS(QThread):
 					self.CurveRadius.emit(curve_radius)
 					self.CurveOffset.emit(curve_offset)
 					self.Status.emit(status)
-					
-				except NameError:
+
+				except TypeError or ValueError or AttributeError:
 					pass
-		
 		# Close all opened windows and stop video Capture
 		video_stream.release()
 		cv.destroyAllWindows()

@@ -54,20 +54,20 @@ class StartODS(QThread):
                     # Convert the processed frame into a numpy array
                     frame = np.squeeze(frame.render())
 
+                    # Convert the frame from OpenCV format to PyQt5 format
+                    frame = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
+                    convert_to_qt_format = QImage(
+                        frame.data, frame.shape[1],
+                        frame.shape[0],
+                        QImage.Format_RGB888)
+                    frame = convert_to_qt_format.scaled(640, 360, Qt.KeepAspectRatio)
+                
+                    # Send the frames and Stats to the GUI window
+                    self.ImageUpdate.emit(frame)
+                    self.odsDetectionStats.emit(odsDetectionStats)
+
                 except TypeError or ValueError or AttributeError:
                     pass
-                # Convert the frame from OpenCV format to PyQt5 format
-                frame = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
-                convert_to_qt_format = QImage(
-                    frame.data, frame.shape[1],
-                    frame.shape[0],
-                    QImage.Format_RGB888)
-                frame = convert_to_qt_format.scaled(640, 360, Qt.KeepAspectRatio)
-            
-                # Send the frames and Stats to the GUI window
-                self.ImageUpdate.emit(frame)
-                self.odsDetectionStats.emit(odsDetectionStats)
-
         # Close all opened windows and stop video Capture
         video_stream.release()
         cv.destroyAllWindows()
