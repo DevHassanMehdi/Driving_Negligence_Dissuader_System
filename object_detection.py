@@ -27,7 +27,7 @@ class StartODS(QThread):
         global odsDetectionStats
         self.ThreadActive = True
         # Capture video
-        video_stream = cv.VideoCapture("dependencies/video/dash.mp4")
+        video_stream = cv.VideoCapture("dependencies/video/lane5.mp4")
         # While the ODS thread is active, Do detections
         while self.ThreadActive:
             # Split video into frames
@@ -35,7 +35,7 @@ class StartODS(QThread):
             if ret:
                 try:
                     # Resizing Frames
-                    frame = cv.resize(frame, (640, 360))
+                    frame = cv.resize(frame, (480, 270))
                 
                     # Detect objects
                     frame = model(frame)

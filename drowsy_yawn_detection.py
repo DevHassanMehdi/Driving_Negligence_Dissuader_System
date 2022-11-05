@@ -176,7 +176,7 @@ class StartDDS(QThread):
 			if ret:
 				try:
 					# Resize the frames
-					frame = imutils.resize(frame, width=640)
+					frame = imutils.resize(frame, width=480)
 					# convert frames into gray scale
 					gray_frame = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
 					

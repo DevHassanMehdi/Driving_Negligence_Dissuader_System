@@ -626,7 +626,7 @@ class StartLDS(QThread):
 			ret, frame = video_stream.read()
 			if ret:
 				# Resize the frame
-				frame = cv.resize(frame, (640, 360))
+				frame = cv.resize(frame, (480, 270))
 				# Store the original frame
 				original_frame = frame.copy()
 				try:
