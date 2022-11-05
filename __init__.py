@@ -272,7 +272,7 @@ class DNDS(QWidget):
 			self.centralwidget.resize(self.width(), self.height())
 		
 		# Method to Close/reset DNDS
-		def close_application():
+		def close_operation():
 			# Confirmation box asking user if they want to close or Reset DNDS
 			confirm_close_reset = QMessageBox()
 			# confirmation box styling
@@ -290,7 +290,7 @@ class DNDS(QWidget):
 					QPushButton:hover{
 						background: #AF0F23;}""")
 			confirm_close_reset.setWindowOpacity(0.95)
-			confirm_close_reset.setText("Driving Negligence Dissuader")
+			confirm_close_reset.setText("Thank you for using DNDS.")
 			confirm_close_reset.setStandardButtons(QMessageBox.Cancel | QMessageBox.Close | QMessageBox.Reset)
 			confirm_close_reset = confirm_close_reset.exec()
 			# If user confirms close then exit app
@@ -323,8 +323,8 @@ class DNDS(QWidget):
 			# Creating shadow object
 			shadow = QGraphicsDropShadowEffect()
 			# setting blur radius (optional step)
-			shadow.setBlurRadius(15)
-			shadow.setColor(QColor(75, 75, 75, 75))
+			shadow.setBlurRadius(10)
+			shadow.setColor(QColor(65, 65, 65, 100))
 			shadow.setOffset(2.5, 7.5)
 			button.setGraphicsEffect(shadow)
 			# Return the button
@@ -676,7 +676,7 @@ class DNDS(QWidget):
 				# Exit Driving Negligence Dissuader System button
 				close_reset_dnds = create_button("X")
 				close_reset_dnds.setObjectName("close_reset_button")
-				close_reset_dnds.clicked.connect(close_application)
+				close_reset_dnds.clicked.connect(close_operation)
 				close_reset_dnds.setFixedSize(25, 25)
 				widgets["close_reset_dnds"].append(close_reset_dnds)
 				

@@ -31,6 +31,8 @@ class StartPDS(QThread):
         video_stream = cv.VideoCapture("dependencies/video/ped2.mov")
         # While the PDS thread is active, Do detections
         while self.ThreadActive:
+            # Set the FPS cap on video
+            cv.waitKey(15)
             # Split video into frames
             ret, frame = video_stream.read()
             if ret:
