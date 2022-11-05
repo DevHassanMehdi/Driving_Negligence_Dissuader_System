@@ -100,7 +100,7 @@ light_style = """
 		font-size: 14px;
 		margin-bottom: 5%}"""
 
-# Stylesheet for light mode
+# Stylesheet for dark mode
 dark_style = """
 	*{
 		color: #B3B3B3;}
@@ -309,7 +309,6 @@ class DNDS(QWidget):
 				if widgets[widget]:
 					widgets[widget][-1].hide()
 					grid.removeWidget(widgets[widget][-1])
-					# widgets[widget][-1].deleteLater()
 				for i in range(0, len(widgets[widget])):
 					widgets[widget].pop()
 		
