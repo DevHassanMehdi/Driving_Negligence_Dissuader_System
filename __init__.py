@@ -10,6 +10,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5 import QtCore
 # Misc Dependencies
+import darkdetect  # To set application theme according to the operating system
 import sys  # For system functions
 
 # Dictionary to store all the widgets of the GUI application
@@ -196,21 +197,26 @@ class DNDS(QWidget):
 		self.setLayout(grid)
 		self.center()
 		
-		# Method to set application theme
-		def set_style():
+		# Method to change application theme
+		def change_theme_stylesheet():
 			# If current style is light, change it to dark
 			if self.styleSheet() == light_style:
 				self.setStyleSheet(dark_style)
 			# If current style is dark, change it to light
 			elif self.styleSheet() == dark_style:
 				self.setStyleSheet(light_style)
-			# Keep the default style to light
-			else:
-				self.setStyleSheet(dark_style)
 		
 		# If te application has no stylesheet, set the default stylesheet
 		if self.styleSheet() == "":
-			set_style()
+			# if system theme is Light, set light stylesheet
+			if darkdetect.isLight():
+				self.setStyleSheet(light_style)
+			# if system theme is Dark, set Dark stylesheet
+			elif darkdetect.isDark():
+				self.setStyleSheet(dark_style)
+			# if system theme is not recognized, set light stylesheet
+			else:
+				self.setStyleSheet(light_style)
 		
 		# Make video frame corners round
 		def make_frame_rounded(widget, video_frame, antialiasing=True):
@@ -619,7 +625,8 @@ class DNDS(QWidget):
 				drowsiness_detection_system.stop()
 				lane_detection_system.stop()
 				object_detection_system.stop()
-				# pedestrian_detection_system.stop()
+			
+			# pedestrian_detection_system.stop()
 			
 			try:
 				# Call Lane detection system and receive the widgets
@@ -682,7 +689,7 @@ class DNDS(QWidget):
 				# Change application stylesheet button
 				theme_change = create_button("")
 				theme_change.setObjectName("theme_change")
-				theme_change.clicked.connect(partial(set_style))
+				theme_change.clicked.connect(partial(change_theme_stylesheet))
 				theme_change.setFixedSize(32, 32)
 				widgets["theme_change"].append(theme_change)
 				
