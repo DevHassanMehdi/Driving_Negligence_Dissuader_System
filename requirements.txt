@@ -1,19 +1,21 @@
-opencv-python==4.6.0.66
-matplotlib==3.6.0
-# also pip install seaborn (to install matplotlb seaborn)
-torchvision==0.14.0
-imutils==0.5.4
-torch==1.13.0
-pandas==1.5.1
-numpy==1.23.4
-dlib==19.24.0
-scipy==1.9.3
-tqdm==4.64.1
-CMake
+opencv-python==4.6.0.66 # Real-time optimized Computer Vision library.
+matplotlib==3.6.0 # A comprehensive library for creating static, animated, and interactive visualizations.
+seaborn # A Python data visualization library based on matplotlib.
+torchvision==0.14.0 # image and video datasets and models for torch deep learning.
+imutils==0.5.4 # A series of convenience functions for image processing functions such as translation, rotation etc.
+torch==1.13.0 # An open source machine learning framework.
+pandas==1.5.1 # A fast, powerful, flexible and easy to use open source data analysis and manipulation tool.
+numpy==1.23.4 # For comprehensive mathematical functions for Sci calculations.
+dlib==19.24.0 # Toolkit containing machine learning algorithms and tools for creating complex software.
+scipy==1.9.3 # Provides algorithms for optimization, integration, interpolation etc.
+tqdm==4.64.1 # A library in Python which is used for creating Progress Meters or Progress Bars.
+CMake==3.24.3 # A cross-platform free and open-source software for build automation and testing etc.
 
-requests==2.28.1
-PyYAML==6.0
+requests==2.28.1 # Library to send HTTP requests using Python.
+PyYAML==6.0 # Data serialization format designed for human readability and interaction with scripting languages.
 
-PyQt5==5.15.7
-PyQt5-stubs==5.15.6.0
-darkdetect
+PyQt5==5.15.7 # Librry to use the Qt GUI framework from Python.
+PyQt5-stubs==5.15.6.0 # Repository that holds stubs for PyQt5
+darkdetect # Packae to detect system theme (Dark, Light)
+
+py2app # Python setuptools command to make standalone application.
