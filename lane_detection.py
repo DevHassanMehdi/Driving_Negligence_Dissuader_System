@@ -13,7 +13,7 @@ import os  # For System functions
 warnings.simplefilter('ignore', np.RankWarning)
 
 # Video input source (Can be video or a camera)
-input_video = 'dependencies/video/lane1.mp4'
+input_video = 'dependencies/video/lane2.mp4'
 
 # Global variables
 font = cv.FONT_HERSHEY_DUPLEX
@@ -104,13 +104,30 @@ class Lane:
 		self.width = width
 		self.height = height
 		
-		# Set the reign of interest
-		self.roi_points = np.float32([
-			(int(0.450 * width), int(0.610 * height)),  # Top-left corner
-			(100, height - 1),  # Bottom-left corner
-			(int(0.900 * width), height - 1),  # Bottom-right corner
-			(int(0.550 * width), int(0.610 * height))  # Top-right corner
-		])
+		if input_video == 'dependencies/video/lane1.mp4':
+			# Set the reign of interest (for Lane1.mp4)
+			self.roi_points = np.float32([
+				(int(0.450 * width), int(0.610 * height)),  # Top-left corner
+				(100, height - 1),  # Bottom-left corner
+				(int(0.900 * width), height - 1),  # Bottom-right corner
+				(int(0.550 * width), int(0.610 * height))  # Top-right corner
+			])
+		elif input_video == 'dependencies/video/lane2.mp4':
+			# Set the reign of interest (for Lane2.mp4)
+			self.roi_points = np.float32([
+				(int(0.350 * width), int(0.500 * height)),  # Top-left corner
+				(10, height - 1),  # Bottom-left corner
+				(int(0.900 * width), height - 1),  # Bottom-right corner
+				(int(0.650 * width), int(0.500 * height))  # Top-right corner
+			])
+		else:
+			# Set the reign of interest
+			self.roi_points = np.float32([
+				(int(0.450 * width), int(0.610 * height)),  # Top-left corner
+				(100, height - 1),  # Bottom-left corner
+				(int(0.900 * width), height - 1),  # Bottom-right corner
+				(int(0.550 * width), int(0.610 * height))  # Top-right corner
+			])
 		
 		# The desired corner locations  of the region of interest after perspective transformation.
 		self.padding = int(0.25 * width)  # padding from side of the image in pixels
@@ -613,7 +630,6 @@ class StartLDS(QThread):
 	
 	# Lane Detection begins here (The method will run when the thread starts)
 	def run(self):
-
 		# Activating thread
 		self.ThreadActive = True
 		global output
@@ -668,17 +684,18 @@ class StartLDS(QThread):
 						frame.data, frame.shape[1],
 						frame.shape[0],
 						QImage.Format_RGB888)
-					frame = convert_to_qt_format.scaled(640, 360, Qt.KeepAspectRatio)
+					frame = convert_to_qt_format.scaled(720, 405, Qt.KeepAspectRatio)
 					
 					# # Send the frames and Stats to the GUI page
 					self.ImageUpdate.emit(frame)
 					self.CurveRadius.emit(curve_radius)
 					self.CurveOffset.emit(curve_offset)
 					self.Status.emit(status)
-
+				
 				except TypeError or ValueError or AttributeError or Exception:
-					self.ThreadActive = False
-					self.wait()
+					print("Trying to Read the footage!")
+					pass
+			# self.stop()
 		# Close all opened windows and stop video Capture
 		video_stream.release()
 		cv.destroyAllWindows()

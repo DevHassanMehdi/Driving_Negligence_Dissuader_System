@@ -62,15 +62,15 @@ class StartODS(QThread):
                         frame.data, frame.shape[1],
                         frame.shape[0],
                         QImage.Format_RGB888)
-                    frame = convert_to_qt_format.scaled(640, 360, Qt.KeepAspectRatio)
+                    frame = convert_to_qt_format.scaled(720, 405, Qt.KeepAspectRatio)
                 
                     # Send the frames and Stats to the GUI window
                     self.ImageUpdate.emit(frame)
                     self.odsDetectionStats.emit(odsDetectionStats)
 
                 except TypeError or ValueError or AttributeError or Exception:
-                    self.ThreadActive = False
-                    self.wait()
+                    print("Trying to Read the footage!")
+                    pass
         # Close all opened windows and stop video Capture
         video_stream.release()
         cv.destroyAllWindows()
