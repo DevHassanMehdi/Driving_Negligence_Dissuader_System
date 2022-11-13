@@ -31,13 +31,13 @@ class StartODS(QThread):
         # While the ODS thread is active, Do detections
         while self.ThreadActive:
             # Set the FPS cap on video
-            cv.waitKey(15)
+            cv.waitKey(10)
             # Split video into frames
             ret, frame = video_stream.read()
             if ret:
                 try:
                     # Resizing Frames
-                    frame = cv.resize(frame, (480, 270))
+                    frame = cv.resize(frame, (560, 315))
                 
                     # Detect objects
                     frame = model(frame)

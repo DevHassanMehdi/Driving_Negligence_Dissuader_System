@@ -13,7 +13,7 @@ import os  # For System functions
 warnings.simplefilter('ignore', np.RankWarning)
 
 # Video input source (Can be video or a camera)
-input_video = 'dependencies/video/lane2.mp4'
+input_video = 'dependencies/video/lane1.mp4'
 
 # Global variables
 font = cv.FONT_HERSHEY_DUPLEX
@@ -107,10 +107,10 @@ class Lane:
 		if input_video == 'dependencies/video/lane1.mp4':
 			# Set the reign of interest (for Lane1.mp4)
 			self.roi_points = np.float32([
-				(int(0.450 * width), int(0.610 * height)),  # Top-left corner
-				(100, height - 1),  # Bottom-left corner
-				(int(0.900 * width), height - 1),  # Bottom-right corner
-				(int(0.550 * width), int(0.610 * height))  # Top-right corner
+				(int(0.480 * width), int(0.635 * height)),  # Top-left corner
+				(150, height - 15),  # Bottom-left corner
+				(int(0.810 * width), height - 15),  # Bottom-right corner
+				(int(0.535 * width), int(0.635 * height))  # Top-right corner
 			])
 		elif input_video == 'dependencies/video/lane2.mp4':
 			# Set the reign of interest (for Lane2.mp4)
@@ -640,12 +640,12 @@ class StartLDS(QThread):
 		# Process the video
 		while self.ThreadActive:
 			# Set the FPS cap on video
-			cv.waitKey(15)
+			#cv.waitKey(10)
 			# Split video into frames
 			ret, frame = video_stream.read()
 			if ret:
 				# Resize the frame
-				frame = cv.resize(frame, (480, 270))
+				frame = cv.resize(frame, (560, 315))
 				# Store the original frame
 				original_frame = frame.copy()
 				try:

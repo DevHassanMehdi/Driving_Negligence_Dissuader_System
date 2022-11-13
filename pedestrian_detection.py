@@ -28,7 +28,7 @@ class StartPDS(QThread):
         global person
         self.ThreadActive = True
         # Capture video
-        video_stream = cv.VideoCapture("dependencies/video/ped2.mov")
+        video_stream = cv.VideoCapture("dependencies/video/ped2.mp4")
         # While the PDS thread is active, Do detections
         while self.ThreadActive:
             # Set the FPS cap on video
@@ -38,7 +38,7 @@ class StartPDS(QThread):
             if ret:
                 try:
                     # Resize the frame
-                    frame = cv.resize(frame, (480, 270))
+                    frame = cv.resize(frame, (560, 315))
                     # USing Sliding window concept to detect humans in the frame
                     rects, weights = HOGCV.detectMultiScale(frame, winStride=(4, 4), padding=(8, 8), scale=2)
                     rects = np.array([[x, y, x + w, y + h] for (x, y, w, h) in rects])
