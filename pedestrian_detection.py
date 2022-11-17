@@ -38,7 +38,7 @@ class StartPDS(QThread):
             if ret:
                 try:
                     # Resize the frame
-                    frame = cv.resize(frame, (560, 315))
+                    frame = cv.resize(frame, (480, 315))
                     # USing Sliding window concept to detect humans in the frame
                     rects, weights = HOGCV.detectMultiScale(frame, winStride=(4, 4), padding=(8, 8), scale=2)
                     rects = np.array([[x, y, x + w, y + h] for (x, y, w, h) in rects])

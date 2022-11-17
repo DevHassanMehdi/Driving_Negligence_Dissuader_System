@@ -600,11 +600,7 @@ class DNDS(QWidget):
 				if return_items:
 					# Set Frame size according to the window
 					video_feed_pds.setFixedSize(560, 315)
-					return \
-						pedestrian_detection_system, \
-						video_feed_pds, \
-						show_detection_stats_pds, \
-						stop_button_pds
+					return pedestrian_detection_system
 				# Show the widgets in a separate page
 				else:
 					# Set Frame size according to the window
@@ -625,6 +621,7 @@ class DNDS(QWidget):
 				drowsiness_detection_system.stop()
 				lane_detection_system.stop()
 				object_detection_system.stop()
+				pedestrian_detection_system.stop()
 			
 			# pedestrian_detection_system.stop()
 			
@@ -636,7 +633,7 @@ class DNDS(QWidget):
 				# Call Object detection system and receive the widgets
 				object_detection_system = page_ods(return_items=True)
 				# Call Pedestrian detection system and receive the widgets
-				# pedestrian_detection_system = page_pds(return_items=True)
+				pedestrian_detection_system = page_pds(return_items=True)
 				
 				# Create stop button that will call the stop_operation method
 				stop_button_dnds = create_button("Stop")
@@ -659,10 +656,10 @@ class DNDS(QWidget):
 				grid.addWidget(widgets["show_detection_stats_ods"][-1], 4, 0, 1, 2)
 				grid.addWidget(widgets["video_feed_ods"][-1], 5, 0, 1, 2)
 				
-				# # place PDS widgets on the grid
-				# grid.addWidget(widgets["show_detection_stats_pds"][-1], 4, 2, 1, 2)
-				# grid.addWidget(widgets["video_feed_pds"][-1], 5, 2, 1, 2)
-				#
+				# place PDS widgets on the grid
+				grid.addWidget(widgets["show_detection_stats_pds"][-1], 4, 2, 1, 2)
+				grid.addWidget(widgets["video_feed_pds"][-1], 5, 2, 1, 2)
+
 				# place the stop widget on the grid
 				grid.addWidget(widgets["stop_button_dnds"][-1], 6, 0, 1, 4)
 			
