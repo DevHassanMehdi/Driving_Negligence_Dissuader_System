@@ -102,6 +102,25 @@ def alert():
 		speech = False
 
 
+# Detect faces
+def detect_faces(gray_frame):
+	faces = face_detector.detectMultiScale(
+		gray_frame, scaleFactor=1.1,
+		minNeighbors=5, minSize=(30, 30),
+		flags=cv.CASCADE_SCALE_IMAGE)
+	return faces, True
+
+
+# Detected landmarks from faces
+def detect_facial_landmarks(x, y, w, h, gray_frame):
+	face = dlib.rectangle(int(x), int(y), int(x + w), int(y + h))
+	# landmarks of the detected face
+	face_landmarks = landmark_predictor(gray_frame, face)
+	# Convert facial landmark array into numpy array
+	face_landmarks = face_utils.shape_to_np(face_landmarks)
+	return face_landmarks, True
+
+
 # Function to calculate eye aspect ratio
 def eye_aspect_ratio(eye_marks):
 	# upper eyelid points
@@ -128,9 +147,7 @@ def final_eye_aspect_ratio(eye_shape):
 	
 	left_eye_aspect_ratio = eye_aspect_ratio(left_eye_shape)
 	right_eye_aspect_ratio = eye_aspect_ratio(right_eye_shape)
-	
 	final_aspect_ratio = (left_eye_aspect_ratio + right_eye_aspect_ratio) / 2.0
-	
 	return final_aspect_ratio, left_eye_shape, right_eye_shape
 
 
@@ -149,6 +166,19 @@ def lip_distance(lips_marks):
 	# Absolute distance b/w upper lip and lowe lip
 	absolute_lip_distance = abs(upper_lip_mean[1] - lower_lip_mean[1])
 	return absolute_lip_distance
+
+
+# Draw eyes and lips on frames
+def draw_eyes_lips(left_eye, right_eye, face_landmarks, frame):
+	draw_left_eye = cv.convexHull(left_eye)
+	cv.drawContours(frame, [draw_left_eye], -1, (255, 255, 255), 1)
+	# Draw detected right eye on each frame
+	draw_right_eye = cv.convexHull(right_eye)
+	cv.drawContours(frame, [draw_right_eye], -1, (255, 255, 255), 1)
+	# Draw detected lips on each frame
+	lip = face_landmarks[48:60]
+	cv.drawContours(frame, [lip], -1, (255, 255, 255), 1)
+	return True
 
 
 # Drowsiness Detection Thread class (The DDS will run in a separate thread when called by the start button from GUI pge)
@@ -188,20 +218,13 @@ class StartDDS(QThread):
 					# convert frames into gray scale
 					gray_frame = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
 					
-					# Detect faces
-					faces = face_detector.detectMultiScale(
-						gray_frame, scaleFactor=1.1,
-						minNeighbors=5, minSize=(30, 30),
-						flags=cv.CASCADE_SCALE_IMAGE)
+					# Detect faces from the frames
+					faces = detect_faces(gray_frame)[0]
 					
 					# Predict facial landmarks
 					for (x, y, w, h) in faces:
-						# Detected face
-						face = dlib.rectangle(int(x), int(y), int(x + w), int(y + h))
-						# landmarks of the detected face
-						face_landmarks = landmark_predictor(gray_frame, face)
-						# Convert facial landmark array into numpy array
-						face_landmarks = face_utils.shape_to_np(face_landmarks)
+						# Detect facial landmarks
+						face_landmarks = detect_facial_landmarks(x, y, w, h, gray_frame)[0]
 						# Send facial landmarks and get final eye aspect ratio
 						eye = final_eye_aspect_ratio(face_landmarks)
 						final_ear = eye[0]
@@ -210,14 +233,7 @@ class StartDDS(QThread):
 						# Send facial landmarks and get upper and lower lip distance
 						final_mar = lip_distance(face_landmarks)
 						# Draw detected left eye on each frame
-						draw_left_eye = cv.convexHull(left_eye)
-						cv.drawContours(frame, [draw_left_eye], -1, (255, 255, 255), 1)
-						# Draw detected right eye on each frame
-						draw_right_eye = cv.convexHull(right_eye)
-						cv.drawContours(frame, [draw_right_eye], -1, (255, 255, 255), 1)
-						# Draw detected lips on each frame
-						lip = face_landmarks[48:60]
-						cv.drawContours(frame, [lip], -1, (255, 255, 255), 1)
+						draw_eyes_lips(left_eye, right_eye, face_landmarks, frame)
 						# Generate Alert
 						generate_alert(final_ear, final_mar)
 						# Set the EAR and Drowsy count string that wil be sent to the GUI frame

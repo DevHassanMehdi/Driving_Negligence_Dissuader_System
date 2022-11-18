@@ -52,7 +52,7 @@ def generate_alert(center_offset):
 	if center_offset < LANE_THRESHOLD_LEFT or center_offset > LANE_THRESHOLD_RIGHT:
 		# Increase counter
 		LANE_THRESH_COUNTER += 1
-		# If closed eye counter exceeds threshold
+		# If lane counter exceeds threshold
 		if LANE_THRESH_COUNTER >= LANE_THRESHOLD:
 			# Alert the driver
 			if not lane_alert and not speech:
@@ -60,7 +60,8 @@ def generate_alert(center_offset):
 				new_thread = Thread(target=alert)
 				new_thread.deamon = True
 				new_thread.start()
-	# stop alert on wake-up
+				return lane_alert
+	# stop alert on lane fix
 	else:
 		LANE_THRESH_COUNTER = 0
 		lane_alert = False
@@ -71,7 +72,7 @@ def alert():
 	global speech
 	global lane_alert
 	# When drowsy
-	while lane_alert:
+	if lane_alert:
 		speech = True
 		speak = "afplay " + "dependencies/audio/stay-in-your-lane.mp3"
 		os.system(speak)
@@ -197,7 +198,7 @@ class Lane:
 		
 		# Combine the possible lane lines with the possible lane line edges
 		self.lane_line_markings = cv.bitwise_or(rs_binary, sxbinary.astype(np.uint8))
-		return self.lane_line_markings
+		return self.lane_line_markings, True
 	
 	# Function to perform perspective transformation on the frames
 	def perspective_transform(self, frame=None):
@@ -223,7 +224,7 @@ class Lane:
 			self.warped_frame, 127, 255, cv.THRESH_BINARY)
 		self.warped_frame = binary_warped
 		
-		return self.warped_frame
+		return self.warped_frame, True
 	
 	# Function to calculate image histogram to find peaks in white pixel count
 	def calculate_histogram(self, frame=None, plot=True):
@@ -245,7 +246,7 @@ class Lane:
 			ax2.set_title("Histogram Peaks")
 			plt.show()
 		
-		return self.histogram
+		return self.histogram, True
 	
 	# Function to get the left and right peak of the histogram
 	def histogram_peak(self):
@@ -534,7 +535,7 @@ class Lane:
 			ax2.set_title("Original Frame With Lane Overlay")
 			plt.show()
 		
-		return result
+		return result, True
 	
 	# Function to calculate curvature of the lane
 	def calculate_curvature(self, print_to_terminal=False):
@@ -551,11 +552,11 @@ class Lane:
 		
 		# Calculate the radii of curvature
 		left_curvem = (
-			(1 + (2 * left_fit_cr[0] * y_eval * self.YM_PER_PIX + left_fit_cr[1]) ** 2)
-			** 1.5) / np.absolute(2 * left_fit_cr[0])
+							  (1 + (2 * left_fit_cr[0] * y_eval * self.YM_PER_PIX + left_fit_cr[1]) ** 2)
+							  ** 1.5) / np.absolute(2 * left_fit_cr[0])
 		right_curvem = (
-			(1 + (2 * right_fit_cr[0] * y_eval * self.YM_PER_PIX + right_fit_cr[1]) ** 2)
-			** 1.5) / np.absolute(2 * right_fit_cr[0])
+							   (1 + (2 * right_fit_cr[0] * y_eval * self.YM_PER_PIX + right_fit_cr[1]) ** 2)
+							   ** 1.5) / np.absolute(2 * right_fit_cr[0])
 		
 		# Display on terminal window
 		if print_to_terminal:
@@ -588,7 +589,6 @@ class Lane:
 			print(str(center_offset) + 'cm')
 		
 		self.center_offset = center_offset
-		
 		return center_offset
 	
 	# Function to plot curvature and offset statistics on the image
@@ -640,7 +640,7 @@ class StartLDS(QThread):
 		# Process the video
 		while self.ThreadActive:
 			# Set the FPS cap on video
-			#cv.waitKey(10)
+			# cv.waitKey(10)
 			# Split video into frames
 			ret, frame = video_stream.read()
 			if ret:
@@ -662,7 +662,7 @@ class StartLDS(QThread):
 					# Fill in the lane line
 					lane_obj.get_lane_line_previous_window(left_fit, right_fit, plot=False)
 					# Overlay lines on the original frame
-					frame_with_lane_lines = lane_obj.overlay_lane_lines(plot=False)
+					frame_with_lane_lines = lane_obj.overlay_lane_lines(plot=False)[0]
 					# Calculate lane line curvature (left and right lane lines)
 					lane_obj.calculate_curvature(print_to_terminal=False)
 					# Calculate center offset
@@ -695,7 +695,6 @@ class StartLDS(QThread):
 				except TypeError or ValueError or AttributeError or Exception:
 					print("Trying to Read the footage!")
 					pass
-			# self.stop()
 		# Close all opened windows and stop video Capture
 		video_stream.release()
 		cv.destroyAllWindows()
