@@ -11,9 +11,11 @@ import dlib  # For face landmark detection
 import os  # For System functions
 
 # Haar cascade classifier for face detection
-face_detector = cv.CascadeClassifier("dependencies/haarcascade_frontalface_default.xml")
+haar_cascade_face_detector = "dependencies/haarcascade_frontalface_default.xml"
+face_detector = cv.CascadeClassifier(haar_cascade_face_detector)
 # Dlib facial landmark detector
-landmark_predictor = dlib.shape_predictor('dependencies/shape_predictor_68_face_landmarks.dat')
+dlib_facial_landmark_predictor = "dependencies/shape_predictor_68_face_landmarks.dat"
+landmark_predictor = dlib.shape_predictor(dlib_facial_landmark_predictor)
 
 # Important Variables that will be used throughout the DDS
 font = cv.FONT_HERSHEY_DUPLEX
@@ -34,7 +36,7 @@ speech = False
 
 
 # Alarm system
-def generate_alert(final_eye_ratio, upper_lower_lip_distance):  # , frame):
+def generate_alert(final_eye_ratio, upper_lower_lip_distance):
 	global EYE_THRESH_COUNTER
 	global YAWN_THRESH_COUNTER
 	global drowsy_alert
@@ -52,14 +54,17 @@ def generate_alert(final_eye_ratio, upper_lower_lip_distance):  # , frame):
 				new_thread = Thread(target=alert)
 				new_thread.deamon = True
 				new_thread.start()
+				return drowsy_alert
 	# stop alert on wake-up
 	else:
 		EYE_THRESH_COUNTER = 0
 		drowsy_alert = False
 	
-	# if yawn is detected
+	# If mouth ratio is above threshold
 	if upper_lower_lip_distance > MOUTH_ASPECT_RATIO_THRESHOLD:
+		# Increase counter
 		YAWN_THRESH_COUNTER += 1
+		# If opened mouth counter exceeds threshold
 		if YAWN_THRESH_COUNTER >= MOUTH_OPEN_THRESHOLD:
 			# Alert the driver
 			if not yawn_alert and not speech:
@@ -67,7 +72,8 @@ def generate_alert(final_eye_ratio, upper_lower_lip_distance):  # , frame):
 				new_thread = Thread(target=alert)
 				new_thread.deamon = True
 				new_thread.start()
-	# stop alert
+				return yawn_alert
+	# stop alert on wake-up
 	else:
 		YAWN_THRESH_COUNTER = 0
 		yawn_alert = False
@@ -79,7 +85,7 @@ def alert():
 	global YAWN_COUNTER
 	global speech
 	# When drowsy
-	while drowsy_alert:
+	if drowsy_alert:
 		speech = True
 		speak = "afplay " + "dependencies/audio/drowsiness-detected.mp3"
 		os.system(speak)
@@ -168,7 +174,7 @@ class StartDDS(QThread):
 		# Activating thread
 		self.ThreadActive = True
 		# Start the video stream
-		video_stream = cv.VideoCapture("dependencies/video/face.mp4")
+		video_stream = cv.VideoCapture(0)
 		# While the DDS thread is active, Do detections
 		while self.ThreadActive:
 			# Set the FPS cap on video
@@ -213,7 +219,7 @@ class StartDDS(QThread):
 						lip = face_landmarks[48:60]
 						cv.drawContours(frame, [lip], -1, (255, 255, 255), 1)
 						# Generate Alert
-						generate_alert(final_ear, final_mar)  # , frame)
+						generate_alert(final_ear, final_mar)
 						# Set the EAR and Drowsy count string that wil be sent to the GUI frame
 						drowsy_stats = f"EAR: {round(final_ear, 1)}    Count: {DROWSY_COUNTER}"
 						# Set the MAR and Yawn count string that wil be sent to the GUI frame

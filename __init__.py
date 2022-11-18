@@ -1,11 +1,11 @@
 # PREP DEPENDENCIES
-from drowsy_yawn_detection import *  # Drowsiness detection system
-from object_detection import *  # Object Detection System
+from drowsy_yawn_detection import StartDDS  # Drowsiness detection system
+from pedestrian_detection import StartPDS
+from object_detection import StartODS  # Object Detection System
+from lane_detection import StartLDS  # Lane Detection System
 from functools import partial  # To send args with connect command
-from lane_detection import *  # Lane Detection System
-from pedestrian_detection import *
 # PyQt5 items for our GUI application
-from PyQt5.QtCore import QPoint
+from PyQt5.QtCore import QPoint, Qt
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5 import QtCore

@@ -18,4 +18,5 @@ PyQt5==5.15.7 # PyQt Api to use the PyQT API and Qt GUI framework.
 PyQt5-stubs==5.15.6.0 # Repository that holds stubs for PyQt5
 darkdetect # Packae to detect system theme (Dark, Light)
 
+pytest  # Python automated testing tool
 py2app # Python setuptools command to make standalone application.
