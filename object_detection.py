@@ -6,9 +6,40 @@ import cv2 as cv  # For enabling computer vision
 import torch  # For Sci-Computation
 
 # Load the yolo-v5 nano model
-model = torch.hub.load('dependencies/yolov5', 'custom', path='dependencies/yolov5/models/yolov5n.pt', source="local")
+model_dir = "dependencies/yolov5/models/yolov5n.pt"
+model = torch.hub.load('dependencies/yolov5', 'custom', path=model_dir, source="local")
 
 global odsDetectionStats
+
+
+# Detect objects from the frame
+def detect_objects(frame):
+    # Detect objects
+    frame = model(frame)
+    return frame
+    
+    
+# Extract detection statistics from the frame
+def extract_detection_data(frame):
+    # Extract detection data
+    data = frame.pandas().xyxy[0].sort_values('class')
+    data = data.to_numpy()
+    
+    # Extract the number of each listed object detected from data
+    stats = f'' \
+            f'Person: {np.count_nonzero(data == "person")}   ' \
+            f'Cycle: {np.count_nonzero(data == "bicycle")}   ' \
+            f'Bike: {np.count_nonzero(data == "motorcycle")}   ' \
+            f'Car: {np.count_nonzero(data == "car")}   ' \
+            f'Bus: {np.count_nonzero(data == "bus")}   ' \
+            f'Truck: {np.count_nonzero(data == "truck")}'
+    return stats
+
+
+# Convert the frame into a numpy array
+def squeeze_frame(frame):
+    frame = np.squeeze(frame.render())
+    return frame
 
 
 # Object Detection Thread class (The ODS will run in a separate thread when called by the start button from GUI pge)
@@ -38,24 +69,15 @@ class StartODS(QThread):
                 try:
                     # Resizing Frames
                     frame = cv.resize(frame, (560, 315))
-                
-                    # Detect objects
-                    frame = model(frame)
-                    data = frame.pandas().xyxy[0].sort_values('class')
-                    data = data.to_numpy()
                     
-                    # Extract the number of each listed object detected and send it to GUI page
-                    odsDetectionStats = f'' \
-                                        f'Person: {np.count_nonzero(data == "person")}   ' \
-                                        f'Cycle: {np.count_nonzero(data == "bicycle")}   ' \
-                                        f'Bike: {np.count_nonzero(data == "motorcycle")}   ' \
-                                        f'Car: {np.count_nonzero(data == "car")}   ' \
-                                        f'Bus: {np.count_nonzero(data == "bus")}   ' \
-                                        f'Truck: {np.count_nonzero(data == "truck")}'
+                    # Detect objects
+                    frame = detect_objects(frame)
+                    # Extract detection data
+                    odsDetectionStats = extract_detection_data(frame)
                     
                     # Convert the processed frame into a numpy array
-                    frame = np.squeeze(frame.render())
-
+                    frame = squeeze_frame(frame)
+                    
                     # Convert the frame from OpenCV format to PyQt5 format
                     frame = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
                     convert_to_qt_format = QImage(
@@ -63,11 +85,11 @@ class StartODS(QThread):
                         frame.shape[0],
                         QImage.Format_RGB888)
                     frame = convert_to_qt_format.scaled(720, 405, Qt.KeepAspectRatio)
-                
+                    
                     # Send the frames and Stats to the GUI window
                     self.ImageUpdate.emit(frame)
                     self.odsDetectionStats.emit(odsDetectionStats)
-
+                
                 except TypeError or ValueError or AttributeError or Exception:
                     print("Trying to Read the footage!")
                     pass
