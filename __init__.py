@@ -12,6 +12,7 @@ from PyQt5 import QtCore
 # Misc Dependencies
 import darkdetect  # To set application theme according to the operating system
 import sys  # For system functions
+import os  # For OS functions
 
 # Dictionary to store all the widgets of the GUI application
 widgets = {
@@ -99,7 +100,9 @@ light_style = """
 	
 	#footer{
 		font-size: 14px;
-		margin-bottom: 5%}"""
+		margin-bottom: 5%}
+		
+		/* This is the end of light stylesheet */"""
 
 # Stylesheet for dark mode
 dark_style = """
@@ -157,7 +160,9 @@ dark_style = """
 		
 	#footer{
 		font-size: 14px;
-		margin-bottom: 5%}"""
+		margin-bottom: 5%}
+		
+		/* This is the end of dark stylesheet */"""
 
 
 # Driving Negligence Dissuader System main class
@@ -219,7 +224,7 @@ class DNDS(QWidget):
 				self.setStyleSheet(light_style)
 		
 		# Make video frame corners round
-		def make_frame_rounded(widget, video_frame, antialiasing=True):
+		def make_frame_rounded(widget, video_frame, antialiasing=False):
 			# set Min Max size for video label widget
 			widget.setMaximumSize(widget.width(), widget.height())
 			widget.setMinimumSize(widget.width(), widget.height())
@@ -659,7 +664,7 @@ class DNDS(QWidget):
 				# place PDS widgets on the grid
 				grid.addWidget(widgets["show_detection_stats_pds"][-1], 4, 2, 1, 2)
 				grid.addWidget(widgets["video_feed_pds"][-1], 5, 2, 1, 2)
-
+				
 				# place the stop widget on the grid
 				grid.addWidget(widgets["stop_button_dnds"][-1], 6, 0, 1, 4)
 			

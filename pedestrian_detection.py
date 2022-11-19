@@ -5,12 +5,12 @@ import cv2 as cv  # For enabling computer vision
 import numpy as np  # For SCi-Calculations
 from imutils.object_detection import non_max_suppression  # To detect multiple humans in a single frame
 
+# Variable to record total detections
+global person
+
 # Histogram of Oriented Gradients Detector
 HOGCV = cv.HOGDescriptor()
 HOGCV.setSVMDetector(cv.HOGDescriptor_getDefaultPeopleDetector())
-
-# Variable to record total detections
-global person
 
 
 # Detect Humans from the frames

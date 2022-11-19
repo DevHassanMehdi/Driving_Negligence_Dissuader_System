@@ -552,11 +552,11 @@ class Lane:
 		
 		# Calculate the radii of curvature
 		left_curvem = (
-							  (1 + (2 * left_fit_cr[0] * y_eval * self.YM_PER_PIX + left_fit_cr[1]) ** 2)
-							  ** 1.5) / np.absolute(2 * left_fit_cr[0])
+							(1 + (2 * left_fit_cr[0] * y_eval * self.YM_PER_PIX + left_fit_cr[1]) ** 2)
+							** 1.5) / np.absolute(2 * left_fit_cr[0])
 		right_curvem = (
-							   (1 + (2 * right_fit_cr[0] * y_eval * self.YM_PER_PIX + right_fit_cr[1]) ** 2)
-							   ** 1.5) / np.absolute(2 * right_fit_cr[0])
+							(1 + (2 * right_fit_cr[0] * y_eval * self.YM_PER_PIX + right_fit_cr[1]) ** 2)
+							** 1.5) / np.absolute(2 * right_fit_cr[0])
 		
 		# Display on terminal window
 		if print_to_terminal:

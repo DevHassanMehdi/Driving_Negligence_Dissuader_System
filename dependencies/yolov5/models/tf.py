@@ -357,7 +357,7 @@ class TFUpsample(keras.layers.Layer):
     def __init__(self, size, scale_factor, mode, w=None):  # warning: all arguments needed including 'w'
         super().__init__()
         assert scale_factor % 2 == 0, "scale_factor must be multiple of 2"
-        self.upsample = lambda x: tf.image.resize(x, (x.shape[1] * scale_factor, x.shape[2] * scale_factor), mode)
+        self.upsample = lambda x: tf.dds_test_image.resize(x, (x.shape[1] * scale_factor, x.shape[2] * scale_factor), mode)
         # self.upsample = keras.layers.UpSampling2D(size=scale_factor, interpolation=mode)
         # with default arguments: align_corners=False, half_pixel_centers=False
         # self.upsample = lambda x: tf.raw_ops.ResizeNearestNeighbor(images=x,
@@ -479,13 +479,13 @@ class TFModel:
                 nms = AgnosticNMS()((boxes, classes, scores), topk_all, iou_thres, conf_thres)
             else:
                 boxes = tf.expand_dims(boxes, 2)
-                nms = tf.image.combined_non_max_suppression(boxes,
-                                                            scores,
-                                                            topk_per_class,
-                                                            topk_all,
-                                                            iou_thres,
-                                                            conf_thres,
-                                                            clip_boxes=False)
+                nms = tf.dds_test_image.combined_non_max_suppression(boxes,
+																	 scores,
+																	 topk_per_class,
+																	 topk_all,
+																	 iou_thres,
+																	 conf_thres,
+																	 clip_boxes=False)
             return (nms,)
         return x  # output [1,6300,85] = [xywh, conf, class0, class1, ...]
         # x = x[0]  # [x(1,6300,85), ...] to x(6300,85)
@@ -515,11 +515,11 @@ class AgnosticNMS(keras.layers.Layer):
         boxes, classes, scores = x
         class_inds = tf.cast(tf.argmax(classes, axis=-1), tf.float32)
         scores_inp = tf.reduce_max(scores, -1)
-        selected_inds = tf.image.non_max_suppression(boxes,
-                                                     scores_inp,
-                                                     max_output_size=topk_all,
-                                                     iou_threshold=iou_thres,
-                                                     score_threshold=conf_thres)
+        selected_inds = tf.dds_test_image.non_max_suppression(boxes,
+															  scores_inp,
+															  max_output_size=topk_all,
+															  iou_threshold=iou_thres,
+															  score_threshold=conf_thres)
         selected_boxes = tf.gather(boxes, selected_inds)
         padded_boxes = tf.pad(selected_boxes,
                               paddings=[[0, topk_all - tf.shape(selected_boxes)[0]], [0, 0]],
