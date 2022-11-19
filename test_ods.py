@@ -1,6 +1,4 @@
 import os
-import time
-import object_detection
 from object_detection import *
 
 image = cv.imread("dependencies/images/ods_test_image.png")
