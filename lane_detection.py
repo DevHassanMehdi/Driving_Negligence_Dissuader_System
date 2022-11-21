@@ -640,7 +640,7 @@ class StartLDS(QThread):
 		# Process the video
 		while self.ThreadActive:
 			# Set the FPS cap on video
-			# cv.waitKey(10)
+			cv.waitKey(5)
 			# Split video into frames
 			ret, frame = video_stream.read()
 			if ret:

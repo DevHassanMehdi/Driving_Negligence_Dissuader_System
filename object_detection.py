@@ -58,11 +58,11 @@ class StartODS(QThread):
 		global odsDetectionStats
 		self.ThreadActive = True
 		# Capture video
-		video_stream = cv.VideoCapture("dependencies/video/lane5.mp4")
+		video_stream = cv.VideoCapture("dependencies/video/traffic.mp4")
 		# While the ODS thread is active, Do detections
 		while self.ThreadActive:
 			# Set the FPS cap on video
-			cv.waitKey(10)
+			cv.waitKey(5)
 			# Split video into frames
 			ret, frame = video_stream.read()
 			if ret:

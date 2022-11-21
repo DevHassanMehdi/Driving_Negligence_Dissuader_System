@@ -208,7 +208,7 @@ class StartDDS(QThread):
 		# While the DDS thread is active, Do detections
 		while self.ThreadActive:
 			# Set the FPS cap on video
-			cv.waitKey(15)
+			cv.waitKey(5)
 			# Split video into frames
 			ret, frame = video_stream.read()
 			if ret:
