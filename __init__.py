@@ -724,7 +724,7 @@ class DNDS(QWidget):
 				footer = create_label()
 				footer.setObjectName("footer")
 				footer_text = \
-					'Driving Negligence Dissuader System (DNDS) is a vehicle safety system to detect drivers ' \
+					'Driving Negligence Dissuader System (DNDS) is a vehicle safety system that detects drivers ' \
 					'drowsiness and yawning.\nThe system also monitors the road in front to detect the road lanes ' \
 					'and other object in front of the vehicle'
 				footer.setAlignment(QtCore.Qt.AlignCenter)

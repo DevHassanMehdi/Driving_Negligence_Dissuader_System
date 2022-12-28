@@ -177,13 +177,13 @@ def test_lanes_overlay():
 
 # Test road curvature function
 def test_curvature():
-	assert test_object.calculate_curvature(print_to_terminal=False) == (101.41419227314752, 73.81808794080365)
+	assert test_object.calculate_curvature(print_to_terminal=False) == (101.41419227314752, 73.81808794080375)
 	assert test_object.calculate_curve_radius() == "Curve Radius: 87.6"
 
 
 # Test Center offset function
 def test_center_offset():
-	assert test_object.calculate_car_position(print_to_terminal=False) == -373.3344238145847
+	assert test_object.calculate_car_position(print_to_terminal=False) == -373.33442381458497
 	assert test_object.calculate_curve_offset() == "Curve Offset: -373.3"
 
 
