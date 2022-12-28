@@ -54,7 +54,7 @@ def test_dark_stylesheet_exists():
 
 
 # Test drowsy_yawn_detection.py
-dds_test_image = cv.imread("dependencies/images/dds_test_image.jpeg")
+dds_test_image = cv.imread("dependencies/testing_images/dds_test_image.jpeg")
 gray_image = cv.cvtColor(dds_test_image, cv.COLOR_BGR2GRAY)
 faces = detect_faces(gray_image)[0]
 for x, y, w, h in faces:
@@ -126,7 +126,7 @@ def test_draw_eyes_lips():
 
 
 # Test lane_detection.py
-lds_test_image = cv.imread("dependencies/images/lds_test_image.png")
+lds_test_image = cv.imread("dependencies/testing_images/lds_test_image.png")
 test_object = Lane(orig_frame=lds_test_image)
 
 
@@ -165,7 +165,7 @@ def test_perspective_transform():
 # Test histogram functions
 def test_histogram():
 	assert test_object.calculate_histogram(plot=False)[-1] is True
-	assert test_object.histogram_peak() == (679, 2330)
+	assert test_object.histogram_peak() == (1005, 2118)
 
 
 # Test lane overlay function
@@ -177,18 +177,18 @@ def test_lanes_overlay():
 
 # Test road curvature function
 def test_curvature():
-	assert test_object.calculate_curvature(print_to_terminal=False) == (101.41419227314752, 73.81808794080375)
-	assert test_object.calculate_curve_radius() == "Curve Radius: 87.6"
+	assert test_object.calculate_curvature(print_to_terminal=False) == (59.27039207604876, 80.9157531072003)
+	assert test_object.calculate_curve_radius() == "Curve Radius: 70.1"
 
 
 # Test Center offset function
 def test_center_offset():
-	assert test_object.calculate_car_position(print_to_terminal=False) == -373.33442381458497
-	assert test_object.calculate_curve_offset() == "Curve Offset: -373.3"
+	assert test_object.calculate_car_position(print_to_terminal=False) == -233.16285434727652
+	assert test_object.calculate_curve_offset() == "Curve Offset: -233.2"
 
 
 # object_detection
-ods_test_image = cv.imread("dependencies/images/ods_test_image.png")
+ods_test_image = cv.imread("dependencies/testing_images/ods_test_image.png")
 results = detect_objects(ods_test_image)
 
 
@@ -223,7 +223,7 @@ def test_squeeze_frame():
 
 
 # Test pedestrian_detection.py
-image = cv.imread("dependencies/images/pds_test_image.png")
+image = cv.imread("dependencies/testing_images/pds_test_image.png")
 rects, weights, pick, person = detect_persons(image)
 
 
