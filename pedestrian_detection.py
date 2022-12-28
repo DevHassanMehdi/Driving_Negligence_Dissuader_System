@@ -51,7 +51,7 @@ class StartPDS(QThread):
 		global person
 		self.ThreadActive = True
 		# Capture video
-		video_stream = cv.VideoCapture("dependencies/video/ped2.mp4")
+		video_stream = cv.VideoCapture("dependencies/video/pds2.mp4")
 		# While the PDS thread is active, Do detections
 		while self.ThreadActive:
 			# Set the FPS cap on video
