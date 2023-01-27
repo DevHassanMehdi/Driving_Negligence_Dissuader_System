@@ -13,7 +13,7 @@ import os  # For System functions
 warnings.simplefilter('ignore', np.RankWarning)
 
 # Video input source (Can be video or a camera)
-input_video = 'dependencies/video/lds1.mp4'
+input_video = 'dependencies/video/lds2.mp4'
 
 # Global variables
 font = cv.FONT_HERSHEY_DUPLEX
