@@ -1,22 +1,22 @@
-opencv-python==4.6.0.66 # Real-time optimized Computer Vision library.
-matplotlib==3.6.2 # A comprehensive library for creating static, animated, and interactive visualizations.
-seaborn # A Python data visualization library based on matplotlib.
+opencv-python==4.7.0.68 # Real-time optimized Computer Vision library.
+matplotlib==3.6.3 # A comprehensive library for creating static, animated, and interactive visualizations.
+seaborn==0.12.2 # A Python data visualization library based on matplotlib.
 torchvision==0.14.1 # image and video datasets and models for torch deep learning.
 imutils==0.5.4 # A series of convenience functions for image processing functions such as translation, rotation etc.
 torch==1.13.1 # An open source machine learning framework.
-pandas==1.5.2 # A fast, powerful, flexible and easy to use open source data analysis and manipulation tool.
+pandas==1.5.3 # A fast, powerful, flexible and easy to use open source data analysis and manipulation tool.
 numpy==1.24.1 # For comprehensive mathematical functions for Sci calculations.
 dlib==19.24.0 # Toolkit containing machine learning algorithms and tools for creating complex software.
-scipy==1.9.3 # Provides algorithms for optimization, integration, interpolation etc.
+scipy==1.10.0 # Provides algorithms for optimization, integration, interpolation etc.
 tqdm==4.64.1 # A library in Python which is used for creating Progress Meters or Progress Bars.
 CMake==3.25.0 # A cross-platform free and open-source software for build automation and testing etc.
 
-requests==2.28.1 # Library to send HTTP requests using Python.
+requests==2.28.2 # Library to send HTTP requests using Python.
 PyYAML==6.0 # Data serialization format designed for human readability and interaction with scripting languages.
 
 PyQt5==5.15.7 # PyQt Api to use the PyQT API and Qt GUI framework.
 PyQt5-stubs==5.15.6.0 # Repository that holds stubs for PyQt5
 darkdetect==0.8.0 # Packae to detect system theme (Dark, Light)
 
-pytest  # Python automated testing tool
+pytest==7.2.1  # Python automated testing tool
 py2app==0.28.5 # Python setuptools command to make standalone application.
