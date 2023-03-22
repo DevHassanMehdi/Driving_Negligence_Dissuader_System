@@ -204,7 +204,7 @@ class StartDDS(QThread):
 		# Activating thread
 		self.ThreadActive = True
 		# Start the video stream
-		video_stream = cv.VideoCapture(0)
+		video_stream = cv.VideoCapture("dependencies/video/dds1.mp4")
 		# While the DDS thread is active, Do detections
 		while self.ThreadActive:
 			# Set the FPS cap on video

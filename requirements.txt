@@ -20,3 +20,5 @@ darkdetect==0.8.0 # Packae to detect system theme (Dark, Light)
 
 pytest==7.2.1  # Python automated testing tool
 py2app==0.28.5 # Python setuptools command to make standalone application.
+
+IPython # A rich toolkit to help you make the most out of using Python interactively
