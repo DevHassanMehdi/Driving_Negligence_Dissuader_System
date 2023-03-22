@@ -1,6 +1,6 @@
 # PREP DEPENDENCIES
 from drowsy_yawn_detection import StartDDS  # Drowsiness detection system
-from pedestrian_detection import StartPDS
+from pedestrian_detection import StartPDS  # Pedestrian detection system
 from object_detection import StartODS  # Object Detection System
 from lane_detection import StartLDS  # Lane Detection System
 from functools import partial  # To send args with connect command

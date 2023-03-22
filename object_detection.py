@@ -59,6 +59,8 @@ class StartODS(QThread):
 		self.ThreadActive = True
 		# Capture video
 		video_stream = cv.VideoCapture("dependencies/video/ods1.mp4")
+		# To use camera instead of video file, replace the above code with... video_stream = cv.VideoCapture(0)
+		
 		# While the ODS thread is active, Do detections
 		while self.ThreadActive:
 			# Set the FPS cap on video
