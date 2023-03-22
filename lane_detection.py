@@ -13,8 +13,8 @@ import os  # For System functions
 warnings.simplefilter('ignore', np.RankWarning)
 
 # Video input source (Can be video or a camera)
-video_stream = 'dependencies/video/lds2.mp4'
-# To use camera instead of video file, replace the above code with... video_stream = 0
+input_video = 'dependencies/video/lds2.mp4'
+# To use camera instead of video file, replace the above code with... input_video = 0
 
 # Global variables
 font = cv.FONT_HERSHEY_DUPLEX
@@ -106,7 +106,7 @@ class Lane:
 		self.width = width
 		self.height = height
 		
-		if video_stream == 'dependencies/video/lane1.mp4':
+		if input_video == 'dependencies/video/lane1.mp4':
 			# Set the reign of interest (for Lane1.mp4)
 			self.roi_points = np.float32([
 				(int(0.480 * width), int(0.635 * height)),  # Top-left corner
@@ -114,7 +114,7 @@ class Lane:
 				(int(0.810 * width), height - 15),  # Bottom-right corner
 				(int(0.535 * width), int(0.635 * height))  # Top-right corner
 			])
-		elif video_stream == 'dependencies/video/lane2.mp4':
+		elif input_video == 'dependencies/video/lane2.mp4':
 			# Set the reign of interest (for Lane2.mp4)
 			self.roi_points = np.float32([
 				(int(0.350 * width), int(0.500 * height)),  # Top-left corner
@@ -636,7 +636,7 @@ class StartLDS(QThread):
 		global output
 		global frame_with_lane_lines
 		# Start the video stream
-		video_stream = cv.VideoCapture(video_stream)
+		video_stream = cv.VideoCapture(input_video)
 		
 		# Process the video
 		while self.ThreadActive:
