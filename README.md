@@ -12,3 +12,56 @@ When a user decides to click the Object Detection button on the home page, they 
 When a user decides to click the Driving Negligence Dissuader button on the home page, they are switched to the DND page. Here, the user is facilitated with all the information about each detection system in their designated corner. Live video sessions for each system show the detections in real-time. The user is warned of any detections by an audio message as well as a warning message below the video footage of the system, where the warning is generated upon detection.
 <img width="896" alt="Picture 3" src="https://user-images.githubusercontent.com/51450993/215088324-253945ac-f54b-4dc0-bca0-8e2a9fdd0601.png">
 
+# Step-By-Step guide on how to get the project running
+
+- Open DNDS project in your code editor (PyCharm Recommended, VsCode or any other editor will work too as long as you know how to use them)
+
+- Create a python vitual environment ```venv``` inside ```Driving_Negligence_Dissuader_System/``` like so ```Driving_Negligence_Dissuader_System/evnv```
+
+- Run the commands below to create and activate the vitual environment. (If you are using PyCharm, you can create a virtual environment in the  settings/python_interpretor section)
+
+        python3.8 -m venv venv
+        
+        source env/bin/activate
+
+
+- Install all the dependencies listed in the ```requirements.txt``` file (You can install the requirements manually one by one or you can install them all by running the following command. Make sure you install the specified versions, as other versions might not work)
+
+        pip install -r requirements.txt
+
+- Wait for the requirements to install and the interpreter to update.
+
+- Run ```__init__.py``` to run the project.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
