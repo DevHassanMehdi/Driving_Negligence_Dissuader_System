@@ -1,4 +1,5 @@
 # Step-By-Step guide on how to get the project running
+Watch - https://www.youtube.com/watch?v=dTuUm56Euo0
 
 - Open DNDS project in your code editor (PyCharm Recommended, VsCode or any other editor will work too as long as you know how to use them)
 
@@ -42,29 +43,3 @@ When a user decides to click the Object Detection button on the home page, they 
 When a user decides to click the Driving Negligence Dissuader button on the home page, they are switched to the DND page. Here, the user is facilitated with all the information about each detection system in their designated corner. Live video sessions for each system show the detections in real-time. The user is warned of any detections by an audio message as well as a warning message below the video footage of the system, where the warning is generated upon detection.
 
 <img width="896" alt="Picture 3" src="https://user-images.githubusercontent.com/51450993/215088324-253945ac-f54b-4dc0-bca0-8e2a9fdd0601.png">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
