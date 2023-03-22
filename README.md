@@ -21,6 +21,25 @@ Watch - https://www.youtube.com/watch?v=dTuUm56Euo0
 - Run ```__init__.py``` to run the project.
 
 
+
+Note: If you want to use different video for input or you want to use video input from a camera, you can change the value of ```video_stream``` variable in each of the detection.py file.
+
+
+drowsy_yawn_detection.py
+
+<img width="896" alt="Picture 3" src="https://user-images.githubusercontent.com/51450993/226995993-40716383-ab20-45d3-9268-21c6cfd238ff.png">
+
+lane_detection.py
+
+<img width="896" alt="Picture 3" src="https://user-images.githubusercontent.com/51450993/226996018-2b7eed7f-5319-4435-9ebe-276e304fedd1.png">
+
+object_detection.py
+<img width="896" alt="Picture 3" src="https://user-images.githubusercontent.com/51450993/226996044-bc602dd6-f6c4-4969-9480-394eba6de806.png">
+
+
+
+
+
 # Driving_Negligence_Dissuader_System
 DNDS is a vehicle safety recommendation system that monitors the driver’s facial behaviour to detect the driver’s drowsiness and yawning. The system also monitors the road in front to detect the road lanes, the lane curvature, the vehicle centre offset, and objects of multiple classes on the road, such as humans, animals, and other vehicles, etc.
 
