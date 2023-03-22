@@ -31,9 +31,10 @@ drowsy_yawn_detection.py
 
 lane_detection.py
 
-<img width="896" alt="Picture 3" src="https://user-images.githubusercontent.com/51450993/226996018-2b7eed7f-5319-4435-9ebe-276e304fedd1.png">
+<img width="896" alt="Picture 3" src="https://user-images.githubusercontent.com/51450993/227026303-41501762-9004-44fd-b279-7c3f79cff1a5.png">
 
 object_detection.py
+
 <img width="896" alt="Picture 3" src="https://user-images.githubusercontent.com/51450993/226996044-bc602dd6-f6c4-4969-9480-394eba6de806.png">
 
 
