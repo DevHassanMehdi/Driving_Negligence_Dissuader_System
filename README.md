@@ -9,7 +9,7 @@ Watch - https://www.youtube.com/watch?v=dTuUm56Euo0
 
         python3.8 -m venv venv
         
-        source env/bin/activate
+        source venv/bin/activate
 
 
 - Install all the dependencies listed in the ```requirements.txt``` file (You can install the requirements manually one by one or you can install them all by running the following command. Make sure you install the specified versions, as other versions might not work)
