@@ -3,7 +3,7 @@ Watch - https://www.youtube.com/watch?v=dTuUm56Euo0
 
 - Open DNDS project in your code editor (PyCharm Recommended, VsCode or any other editor will work too as long as you know how to use them)
 
-- Create a python vitual environment ```venv``` inside ```Driving_Negligence_Dissuader_System/``` like so ```Driving_Negligence_Dissuader_System/evnv```
+- Create a python vitual environment ```venv``` inside ```Driving_Negligence_Dissuader_System/``` like so ```Driving_Negligence_Dissuader_System/venv```
 
 - Run the commands below to create and activate the vitual environment. (If you are using PyCharm, you can create a virtual environment in the  settings/python_interpretor section)
 
